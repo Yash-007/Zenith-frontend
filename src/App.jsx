@@ -1,28 +1,43 @@
 import './App.css'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { selectIsAuthenticated } from './store/slices/authSlice'
 import Layout from './components/layout/Layout'
-import ChallengeList from './components/features/challenges/ChallengeList'
+import HomePage from './pages/home'
+import ChallengesPage from './pages/challenges'
+import LoginPage from './pages/auth/login'
+import RegisterPage from './pages/auth/register'
+
+// Protected Route wrapper
+function ProtectedRoute({ children }) {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  return isAuthenticated ? children : <Navigate to="/login" />;
+}
 
 function App() {
-  return (
-    <Layout>
-      <div>
-        <div className="bg-gradient-to-b from-primary-100 via-secondary-50 to-white py-12 mb-8">
-          <div className="text-center max-w-4xl mx-auto px-4">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              Elevate Your Life with Zenith
-            </h1>
-            <p className="text-xl text-gray-600">
-              Your journey to personal growth starts here. Complete daily challenges across physical, mental, 
-              and personal dimensions. Track your progress, earn rewards, and become your best self.
-            </p>
-          </div>
-        </div>
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
-        <div className="max-w-7xl mx-auto px-4">
-          <ChallengeList />
-        </div>
-      </div>
-    </Layout>
+  return (
+    <Router>
+      <Routes>
+        <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/challenges" />} />
+        <Route path="/register" element={!isAuthenticated ? <RegisterPage /> : <Navigate to="/challenges" />} />
+        
+        <Route path="/" element={
+          <Layout>
+            <HomePage />
+          </Layout>
+        } />
+        
+        <Route path="/challenges" element={
+          <ProtectedRoute>
+            <Layout>
+              <ChallengesPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+      </Routes>
+    </Router>
   )
 }
 
