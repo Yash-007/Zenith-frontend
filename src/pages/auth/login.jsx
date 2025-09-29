@@ -29,9 +29,16 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await dispatch(loginUser(formData));
-    if (!result.error) {
-      navigate('/challenges');
+    try {
+      const resultAction = await dispatch(loginUser(formData));
+      if (!resultAction.error) {
+        // Fetch user data after successful login
+        await dispatch(fetchCurrentUser());
+        navigate('/challenges');
+      }
+    } catch (err) {
+      // Error is handled by the reducer and shown via error state
+      console.error('Login failed:', err);
     }
   };
 

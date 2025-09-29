@@ -50,9 +50,16 @@ export default function RegisterPage() {
     if (formData.interests.length < 2) {
       return; // Add error handling for minimum interests
     }
-    const result = await dispatch(registerUser(formData));
-    if (!result.error) {
-      navigate('/challenges');
+    try {
+      const resultAction = await dispatch(registerUser(formData));
+      if (!resultAction.error) {
+        // Fetch user data after successful registration
+        await dispatch(fetchCurrentUser());
+        navigate('/challenges');
+      }
+    } catch (err) {
+      // Error is handled by the reducer and shown via error state
+      console.error('Registration failed:', err);
     }
   };
 

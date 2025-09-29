@@ -7,13 +7,13 @@ export const loginUser = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await userApi.login(credentials);
-      if (response.success) {
-        localStorage.setItem('token', response.data.token);
-        return response.data;
+      if (response?.success) {
+        localStorage.setItem('token', response.token);
+        return response;
       }
-      return rejectWithValue(response.message);
+      return rejectWithValue(response?.message);
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Login failed');
+      return rejectWithValue(error?.message || 'Login failed');
     }
   }
 );
@@ -23,13 +23,29 @@ export const registerUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await userApi.register(userData);
-      if (response.success) {
-        localStorage.setItem('token', response.data.token);
+      if (response?.success) {
+        localStorage.setItem('token', response?.token);
+        return response;
+      }
+      return rejectWithValue(response?.message);
+    } catch (error) {
+      return rejectWithValue(error?.message || 'Registration failed');
+    }
+  }
+);
+
+// Fetch current user thunk
+export const fetchCurrentUser = createAsyncThunk(
+  'auth/fetchCurrentUser',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await userApi.getCurrentUser();
+      if (response?.success) {
         return response.data;
       }
-      return rejectWithValue(response.message);
+      return rejectWithValue(response?.message);
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Registration failed');
+      return rejectWithValue(error?.message || 'Failed to fetch user data');
     }
   }
 );
@@ -39,7 +55,8 @@ const initialState = {
   isAuthenticated: !!localStorage.getItem('token'),
   loading: false,
   error: null,
-  user: null
+  user: null,
+  userLoading: false
 };
 
 const authSlice = createSlice({
@@ -85,6 +102,26 @@ const authSlice = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      // Fetch Current User
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.userLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.userLoading = false;
+        state.user = action.payload;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.userLoading = false;
+        state.error = action.payload;
+        // If we can't fetch user data, we should probably log them out
+        if (action.payload === 'Unauthorized') {
+          state.token = null;
+          state.isAuthenticated = false;
+          state.user = null;
+          localStorage.removeItem('token');
+        }
       });
   }
 });

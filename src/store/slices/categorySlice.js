@@ -6,9 +6,12 @@ export const fetchCategories = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await categoryApi.getAllCategories();
-      return response.data;
+      if (response?.success) {
+        return response.data;
+      }
+      return rejectWithValue(response?.message);
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch categories');
+      return rejectWithValue(error?.message || 'Failed to fetch categories');
     }
   }
 );

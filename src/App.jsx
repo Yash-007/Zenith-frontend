@@ -1,7 +1,8 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { selectIsAuthenticated } from './store/slices/authSlice'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectIsAuthenticated, fetchCurrentUser } from './store/slices/authSlice'
 import Layout from './components/layout/Layout'
 import HomePage from './pages/home'
 import ChallengesPage from './pages/challenges'
@@ -15,7 +16,15 @@ function ProtectedRoute({ children }) {
 }
 
 function App() {
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  useEffect(() => {
+    // Fetch user data on app load if authenticated
+    if (isAuthenticated) {
+      dispatch(fetchCurrentUser());
+    }
+  }, [dispatch, isAuthenticated]);
 
   return (
     <Router>
