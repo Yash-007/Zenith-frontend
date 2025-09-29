@@ -16,44 +16,60 @@ const categoryIcons = {
 // Modern gradient color combinations by category ID
 const categoryStyles = {
   0: { // All
-    base: 'bg-gradient-to-r from-blue-500 to-purple-500',
-    border: 'hover:border-blue-200',
-    shadow: 'shadow-blue-500/25',
+    base: 'bg-gradient-to-r from-[#2DD4BF] to-[#0EA5E9]',
+    light: 'bg-gradient-to-r from-teal-50 to-sky-50',
+    border: 'hover:border-teal-200',
+    shadow: 'shadow-teal-500/25',
+    text: 'text-teal-700'
   },
   1: { // Physical Wellness
-    base: 'bg-gradient-to-r from-blue-400 to-indigo-500',
-    border: 'hover:border-blue-200',
-    shadow: 'shadow-blue-500/25',
+    base: 'bg-gradient-to-r from-[#F87171] to-[#EC4899]',
+    light: 'bg-gradient-to-r from-red-50 to-pink-50',
+    border: 'hover:border-red-200',
+    shadow: 'shadow-red-500/25',
+    text: 'text-red-700'
   },
   2: { // Mental Fitness
-    base: 'bg-gradient-to-r from-violet-500 to-purple-500',
+    base: 'bg-gradient-to-r from-[#8B5CF6] to-[#6366F1]',
+    light: 'bg-gradient-to-r from-violet-50 to-indigo-50',
     border: 'hover:border-violet-200',
     shadow: 'shadow-violet-500/25',
+    text: 'text-violet-700'
   },
   3: { // Social Impact
-    base: 'bg-gradient-to-r from-emerald-400 to-green-500',
+    base: 'bg-gradient-to-r from-[#34D399] to-[#059669]',
+    light: 'bg-gradient-to-r from-emerald-50 to-green-50',
     border: 'hover:border-emerald-200',
     shadow: 'shadow-emerald-500/25',
+    text: 'text-emerald-700'
   },
   4: { // Skill Development
-    base: 'bg-gradient-to-r from-orange-400 to-pink-500',
+    base: 'bg-gradient-to-r from-[#FB923C] to-[#DB2777]',
+    light: 'bg-gradient-to-r from-orange-50 to-pink-50',
     border: 'hover:border-orange-200',
     shadow: 'shadow-orange-500/25',
+    text: 'text-orange-700'
   },
   5: { // Financial Wellness
-    base: 'bg-gradient-to-r from-cyan-400 to-blue-500',
-    border: 'hover:border-cyan-200',
-    shadow: 'shadow-cyan-500/25',
+    base: 'bg-gradient-to-r from-[#38BDF8] to-[#818CF8]',
+    light: 'bg-gradient-to-r from-sky-50 to-indigo-50',
+    border: 'hover:border-sky-200',
+    shadow: 'shadow-sky-500/25',
+    text: 'text-sky-700'
   },
   6: { // Personal Growth
-    base: 'bg-gradient-to-r from-rose-400 to-pink-500',
-    border: 'hover:border-rose-200',
-    shadow: 'shadow-rose-500/25',
+    base: 'bg-gradient-to-r from-[#A78BFA] to-[#EC4899]',
+    light: 'bg-gradient-to-r from-purple-50 to-pink-50',
+    border: 'hover:border-purple-200',
+    shadow: 'shadow-purple-500/25',
+    text: 'text-purple-700'
   },
   7: { // Others
-    base: 'bg-gradient-to-r from-gray-500 to-slate-600',
-    border: 'hover:border-gray-200',
-    shadow: 'shadow-gray-500/25',
+    base: 'bg-gradient-to-r from-[#64748B] to-[#475569]',
+    light: 'bg-gradient-to-r from-slate-50 to-gray-50',
+    border: 'hover:border-slate-200',
+    shadow: 'shadow-slate-500/25',
+    text: 'text-slate-700'
   }
 };
 
@@ -100,22 +116,34 @@ export default function InterestFilter({ onFilterChange, challengesByInterest })
 
   const getCategoryStyle = (category) => {
     const id = category.id === 'all' ? 0 : Number(category.id);
-    return categoryStyles[id] || categoryStyles[7]; // Default to Others style if ID not found
+    return categoryStyles[id] || categoryStyles[7];
   };
 
   return (
-    <div className="py-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">Explore Challenges</h2>
+    <div className="py-6">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-1">Explore Challenges</h2>
+          <p className="text-sm text-gray-500">Choose your interests to discover relevant challenges</p>
+        </div>
         {selectedInterests.size > 0 && !selectedInterests.has('all') && (
           <button
             onClick={() => {
               setSelectedInterests(new Set(['all']));
               onFilterChange([]);
             }}
-            className="text-sm text-primary-600 hover:text-primary-700"
+            className="inline-flex items-center px-4 py-2 text-sm font-semibold
+              rounded-xl transition-all duration-200 ease-out
+              bg-white/80 backdrop-blur-sm border border-gray-200 
+              hover:border-red-200 hover:bg-red-50/80
+              text-gray-700 hover:text-red-600
+              shadow-sm hover:shadow
+              transform hover:scale-[1.02] active:scale-[0.98]"
           >
-            Clear all
+            <svg className="w-4 h-4 mr-2 -ml-0.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Clear filters
           </button>
         )}
       </div>
@@ -129,23 +157,26 @@ export default function InterestFilter({ onFilterChange, challengesByInterest })
               key={category.id}
               onClick={() => toggleCategory(category.id)}
               className={`
-                relative flex flex-col items-center justify-center p-4 rounded-xl 
-                transition-all duration-300 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]
+                group relative flex flex-col items-center justify-center p-5 rounded-2xl
+                transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-[0.98]
                 ${isSelected 
-                  ? `${style.base} text-white ${style.shadow}`
-                  : `bg-white border-2 border-gray-100 ${style.border}`
+                  ? `${style.base} text-white ${style.shadow} shadow-lg`
+                  : `${style.light} shadow-sm hover:shadow border border-transparent ${style.border}`
                 }
               `}
             >
               <div className={`
-                w-12 h-12 flex items-center justify-center rounded-full mb-3
-                ${isSelected ? 'bg-white/20' : 'bg-gray-50'}
-                transition-colors duration-300
+                w-14 h-14 flex items-center justify-center rounded-xl mb-3
+                backdrop-blur-sm
+                ${isSelected ? 'bg-white/20' : 'bg-white/60 group-hover:bg-white/80'}
+                transition-all duration-300 ease-out
               `}>
-                <span className="text-2xl">{categoryIcons[category.name] || '📋'}</span>
+                <span className="text-2xl transform transition-transform duration-300 group-hover:scale-110">
+                  {categoryIcons[category.name] || '📋'}
+                </span>
               </div>
-              <span className={`text-sm font-medium ${
-                isSelected ? 'text-white' : 'text-gray-700'
+              <span className={`text-sm font-semibold tracking-wide ${
+                isSelected ? 'text-white' : style.text
               }`}>
                 {category.name}
               </span>
