@@ -68,6 +68,8 @@ const authSlice = createSlice({
       state.token = null;
       state.isAuthenticated = false;
       state.user = null;
+      state.userLoading = false;
+      state.error = null;
     },
     clearError: (state) => {
       state.error = null;
@@ -132,6 +134,7 @@ export const { logout, clearError } = authSlice.actions;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const selectAuthLoading = (state) => state.auth.loading;
 export const selectAuthError = (state) => state.auth.error;
+export const selectCurrentUser = (state) => state.auth.user;
 
 export default authSlice.reducer;
 

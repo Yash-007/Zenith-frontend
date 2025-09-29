@@ -1,4 +1,9 @@
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from '../../store/slices/authSlice';
+
 export default function HomePage() {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   return (
     <div>
       {/* Hero Section */}
@@ -20,28 +25,28 @@ export default function HomePage() {
               and personal dimensions. Track your progress, earn rewards, and become your best self.
             </p>
             <div className="flex items-center justify-center gap-4">
-              <a
-                href="/challenges"
+              <Link
+                to={isAuthenticated ? "/challenges" : "/register"}
                 className="inline-flex items-center px-6 py-3 rounded-xl text-base font-semibold
                   bg-gradient-to-r from-indigo-500 to-purple-500 text-white
                   hover:from-indigo-600 hover:to-purple-600
                   transition-all duration-200 ease-out transform hover:scale-[1.02]
                   shadow-sm hover:shadow"
               >
-                Explore Challenges
+                {isAuthenticated ? 'Explore Challenges' : 'Get Started'}
                 <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none">
                   <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-              </a>
-              <a
-                href="/leaderboard"
+              </Link>
+              <Link
+                to={isAuthenticated ? "/leaderboard" : "/login"}
                 className="inline-flex items-center px-6 py-3 rounded-xl text-base font-semibold
                   bg-white text-gray-700 hover:text-gray-900
                   hover:bg-gray-50 border border-gray-200
                   transition-all duration-200 ease-out"
               >
-                View Leaderboard
-              </a>
+                {isAuthenticated ? 'View Leaderboard' : 'Sign In'}
+              </Link>
             </div>
           </div>
         </div>

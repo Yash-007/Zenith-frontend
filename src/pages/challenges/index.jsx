@@ -1,6 +1,9 @@
 import ChallengeList from '../../components/features/challenges/ChallengeList';
+import { selectCurrentUser } from '../../store/slices/authSlice';
+import { useSelector } from 'react-redux';
 
 export default function ChallengesPage() {
+  const user = useSelector(selectCurrentUser);
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Header Section */}
@@ -47,16 +50,16 @@ export default function ChallengesPage() {
           <div className="mt-1 text-2xl font-bold text-gray-900">24</div>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-          <div className="text-sm font-medium text-gray-500">Total Points Earned</div>
-          <div className="mt-1 text-2xl font-bold text-purple-600">1,250</div>
+          <div className="text-sm font-medium text-gray-500">Challenges Completed</div>
+          <div className="mt-1 text-2xl font-bold text-green-600">{user?.challengesCompleted}</div>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-          <div className="text-sm font-medium text-gray-500">Challenges Completed</div>
-          <div className="mt-1 text-2xl font-bold text-green-600">15</div>
+          <div className="text-sm font-medium text-gray-500">Your Points</div>
+          <div className="mt-1 text-2xl font-bold text-purple-600">{user?.currentPoints}</div>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <div className="text-sm font-medium text-gray-500">Current Streak</div>
-          <div className="mt-1 text-2xl font-bold text-amber-600">5 days</div>
+          <div className="mt-1 text-2xl font-bold text-amber-600">{user?.currentStreak} days</div>
         </div>
       </div>
 

@@ -32,7 +32,7 @@ export default function RegisterPage() {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'age' ? (value ? parseInt(value, 10) : '') : value
     }));
   };
 
@@ -47,7 +47,7 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.interests.length < 2) {
+    if (formData.interests.length < 4) {
       return; // Add error handling for minimum interests
     }
     try {
@@ -194,7 +194,7 @@ export default function RegisterPage() {
             {/* Interests Selection */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Select your interests * (minimum 2)
+                Select your interests * (minimum 4)
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {categories.map((category) => (
@@ -212,9 +212,9 @@ export default function RegisterPage() {
                   </button>
                 ))}
               </div>
-              {formData.interests.length < 2 && (
+              {formData.interests.length < 4 && (
                 <p className="mt-2 text-sm text-amber-600">
-                  Please select at least 2 interests
+                  Please select at least 4 interests
                 </p>
               )}
             </div>
@@ -229,7 +229,7 @@ export default function RegisterPage() {
           <div>
             <button
               type="submit"
-              disabled={loading || formData.interests.length < 2}
+              disabled={loading || formData.interests.length < 4}
               className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg
                 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700
                 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
