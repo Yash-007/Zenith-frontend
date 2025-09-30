@@ -49,24 +49,50 @@ export default function ChallengeDetail() {
     images: []
   });
   const [previewUrls, setPreviewUrls] = useState([]);
+
+  // Cleanup preview URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [previewUrls]);
   const [error, setError] = useState(null);
   const [challenge, setChallenge] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
+    if (!id) {
+      setLoadError('Invalid challenge ID');
+      setIsLoading(false);
+      return;
+    }
+
     const fetchChallenge = async () => {
       try {
         setIsLoading(true);
         setLoadError(null);
         const response = await challengeApi.getChallenge(id);
         if (response.success) {
-          setChallenge(response.data);
+          // Add test submission data to API response
+          const testData = {
+            ...response.data,
+            isSubmitted: true, // Try changing to false to see submission form
+            SubmissionStatus: 'REJECTED', // Try: 'PENDING', 'COMPLETED', 'REJECTED'
+          };
+          setChallenge(testData);
         } else {
-          setLoadError(response.message || 'Failed to load challenge');
+          const errorMessage = response?.response?.data?.message || 'Failed to load challenge';
+          console.log('Challenge Load Error:', { response });
+          setLoadError(errorMessage);
         }
       } catch (err) {
-        setLoadError(err.message || 'Failed to load challenge');
+        console.error('Challenge Load Error:', err);
+        const errorMessage = err.response?.data?.message 
+          || err.response?.data?.error 
+          || err.message 
+          || 'Failed to load challenge';
+        setLoadError(errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -229,29 +255,79 @@ export default function ChallengeDetail() {
         </div>
       </div>
 
-      {/* Submission Form */}
+      {/* Challenge Submission Section */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Submit Your Challenge</h2>
+        {challenge.isSubmitted ? (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <h2 className="text-xl font-bold text-gray-900">Challenge Submitted</h2>
+              <div className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                challenge.SubmissionStatus === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                challenge.SubmissionStatus === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                'bg-red-100 text-red-800'
+              }`}>
+                {challenge.SubmissionStatus === 'COMPLETED' ? 'Completed' :
+                 challenge.SubmissionStatus === 'PENDING' ? 'Under Review' :
+                 'Rejected'}
+              </div>
+            </div>
 
-        <form onSubmit={async (e) => {
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate(`/submissions/${challenge.submissionId}`)}
+                className="inline-flex items-center justify-center px-4 py-2 rounded-lg
+                  text-sm font-medium transition-all duration-200 ease-out
+                  bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600
+                  text-white shadow-sm hover:shadow transform hover:scale-[1.02] active:scale-[0.98]"
+              >
+                View Submission
+                <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Submit Your Challenge</h2>
+            <form onSubmit={async (e) => {
           e.preventDefault();
-          if (!formData.description.trim()) {
+          setError(null);
+
+          // Validate text submission
+          if (!formData.description || !formData.description.trim()) {
             setError('Please share your experience with this challenge.');
             return;
           }
-          if (formData.images.length === 0) {
+
+          // Validate text length
+          if (formData.description.trim().length < 10) {
+            setError('Please provide a more detailed description of your experience.');
+            return;
+          }
+
+          // Validate images
+          if (!formData.images || formData.images.length === 0) {
             setError('Please add at least one photo to capture your progress.');
+            return;
+          }
+
+          // Validate image count
+          if (formData.images.length > 5) {
+            setError('You can upload a maximum of 5 images.');
             return;
           }
           
           setError(null);
           setIsSubmitting(true);
           
-          try {
-            if (!currentUser?.id) {
-              throw new Error('User not found. Please try logging in again.');
-            }
+          if (!currentUser?.id) {
+            toast.error('User not found. Please try logging in again.');
+            setIsSubmitting(false);
+            return;
+          }
 
+          try {
             const submitData = new FormData();
             submitData.append('userId', currentUser.id);
             submitData.append('challengeId', id);
@@ -267,30 +343,33 @@ export default function ChallengeDetail() {
             formData.images.slice(0, 5).forEach(image => {
               submitData.append('images', image);
             });
+
+            const response = await challengeApi.submitChallenge(submitData);
             
-            try {
-              const response = await challengeApi.submitChallenge(submitData);
-              
-              if (response.success) {
+            if (response.success) {
+              try {
                 // Fetch updated user data (for streaks, points, etc.)
                 await dispatch(fetchCurrentUser());
-                toast.success('Challenge submitted successfully! Our team will review it shortly.');
-                navigate('/challenges');
-              } else {
-                console.log('Submit Challenge Response:', response);
-                toast.error('Failed to submit challenge');
-                setIsSubmitting(false);
+              } catch (error) {
+                console.error('Error fetching updated user data:', error);
+                // Continue with navigation even if user data fetch fails
               }
-            } catch (error) {
-              // Extract error message from response
-              console.log('Submit Challenge Error:', error);
-              const errorMessage = 'Failed to submit challenge';
+              
+              toast.success('Challenge submitted successfully! Our team will review it shortly.');
+              navigate('/challenges');
+            } else {
+              const errorMessage = response.message || 'Failed to submit challenge';
+              console.error('Submit Challenge Failed:', response);
               toast.error(errorMessage);
               setIsSubmitting(false);
             }
-          } catch (err) {
-            console.error('Submit Challenge Error:', err);
-            toast.error('Failed to submit challenge. Please try again.');
+          } catch (error) {
+            console.error('Submit Challenge Error:', error);
+            const errorMessage = error.response?.data?.message 
+              || error.response?.data?.error 
+              || error.message 
+              || 'Failed to submit challenge';
+            toast.error(errorMessage);
             setIsSubmitting(false);
           }
         }}>
@@ -434,8 +513,10 @@ export default function ChallengeDetail() {
               )}
             </button>
           </div>
-        </form>
-      </div>
-    </div>
-  );
+            </form>
+          </>
+  )}
+  </div>
+  </div>
+  )
 }
