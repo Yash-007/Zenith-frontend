@@ -11,7 +11,6 @@ export const loginUser = createAsyncThunk(
         localStorage.setItem('token', response.token);
         return response;
       }
-      console.log('Login rejected', response);
       return rejectWithValue(response?.response?.data?.message || response?.message);
     } catch (error) {
       return rejectWithValue(error?.message || 'Login failed');

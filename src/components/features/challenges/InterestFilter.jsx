@@ -120,11 +120,10 @@ export default function InterestFilter({ onFilterChange, challengesByInterest })
   };
 
   return (
-    <div className="py-6">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-1">Explore Challenges</h2>
-          <p className="text-sm text-gray-500">Choose your interests to discover relevant challenges</p>
+    <div className="py-4">
+      <div className="flex flex-wrap items-center gap-4 mb-4">
+        <div className="flex-1">
+          <h2 className="text-xl font-bold text-gray-900">Filter by Interest</h2>
         </div>
         {selectedInterests.size > 0 && !selectedInterests.has('all') && (
           <button
@@ -132,22 +131,21 @@ export default function InterestFilter({ onFilterChange, challengesByInterest })
               setSelectedInterests(new Set(['all']));
               onFilterChange([]);
             }}
-            className="inline-flex items-center px-4 py-2 text-sm font-semibold
-              rounded-xl transition-all duration-200 ease-out
+            className="inline-flex items-center px-3 py-1.5 text-sm font-medium
+              rounded-lg transition-all duration-200 ease-out
               bg-white/80 backdrop-blur-sm border border-gray-200 
               hover:border-red-200 hover:bg-red-50/80
               text-gray-700 hover:text-red-600
-              shadow-sm hover:shadow
-              transform hover:scale-[1.02] active:scale-[0.98]"
+              shadow-sm hover:shadow"
           >
-            <svg className="w-4 h-4 mr-2 -ml-0.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg className="w-3.5 h-3.5 mr-1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            Clear filters
+            Clear
           </button>
         )}
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="flex flex-nowrap gap-2 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
         {availableCategories.map((category) => {
           const isSelected = selectedInterests.has(category.id);
           const style = getCategoryStyle(category);
@@ -157,25 +155,18 @@ export default function InterestFilter({ onFilterChange, challengesByInterest })
               key={category.id}
               onClick={() => toggleCategory(category.id)}
               className={`
-                group relative flex flex-col items-center justify-center p-5 rounded-2xl
-                transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-[0.98]
+                group flex items-center space-x-2 shrink-0 px-4 py-2 rounded-xl
+                transition-all duration-200 ease-out transform hover:scale-[1.02] active:scale-[0.98]
                 ${isSelected 
-                  ? `${style.base} text-white ${style.shadow} shadow-lg`
+                  ? `${style.base} text-white ${style.shadow} shadow-md`
                   : `${style.light} shadow-sm hover:shadow border border-transparent ${style.border}`
                 }
               `}
             >
-              <div className={`
-                w-14 h-14 flex items-center justify-center rounded-xl mb-3
-                backdrop-blur-sm
-                ${isSelected ? 'bg-white/20' : 'bg-white/60 group-hover:bg-white/80'}
-                transition-all duration-300 ease-out
-              `}>
-                <span className="text-2xl transform transition-transform duration-300 group-hover:scale-110">
-                  {categoryIcons[category.name] || '📋'}
-                </span>
-              </div>
-              <span className={`text-sm font-semibold tracking-wide ${
+              <span className="text-xl">
+                {categoryIcons[category.name] || '📋'}
+              </span>
+              <span className={`text-sm font-medium whitespace-nowrap ${
                 isSelected ? 'text-white' : style.text
               }`}>
                 {category.name}
