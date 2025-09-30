@@ -11,7 +11,8 @@ export const loginUser = createAsyncThunk(
         localStorage.setItem('token', response.token);
         return response;
       }
-      return rejectWithValue(response?.message);
+      console.log('Login rejected', response);
+      return rejectWithValue(response?.response?.data?.message || response?.message);
     } catch (error) {
       return rejectWithValue(error?.message || 'Login failed');
     }
@@ -27,7 +28,7 @@ export const registerUser = createAsyncThunk(
         localStorage.setItem('token', response?.token);
         return response;
       }
-      return rejectWithValue(response?.message);
+      return rejectWithValue(response?.response?.data?.message || response?.message);
     } catch (error) {
       return rejectWithValue(error?.message || 'Registration failed');
     }
@@ -43,7 +44,7 @@ export const fetchCurrentUser = createAsyncThunk(
       if (response?.success) {
         return response.data;
       }
-      return rejectWithValue(response?.message);
+      return rejectWithValue(response?.response?.data?.message || response?.message);
     } catch (error) {
       return rejectWithValue(error?.message || 'Failed to fetch user data');
     }
@@ -89,6 +90,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
+        console.log('Login rejected', action.payload);
         state.error = action.payload;
       })
       // Register

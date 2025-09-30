@@ -9,7 +9,7 @@ export const fetchCategories = createAsyncThunk(
       if (response?.success) {
         return response.data;
       }
-      return rejectWithValue(response?.message);
+      return rejectWithValue(response?.response?.data?.message || response?.message);
     } catch (error) {
       return rejectWithValue(error?.message || 'Failed to fetch categories');
     }

@@ -11,7 +11,7 @@ export const fetchUserChallenges = createAsyncThunk(
       if (response?.success) {
         return response.data;
       }
-      return rejectWithValue(response?.message);
+      return rejectWithValue(response?.response?.data?.message || response?.message);
     } catch (error) {
       return rejectWithValue(error?.message || 'Failed to fetch user challenges');
     }
@@ -23,7 +23,10 @@ export const submitChallenge = createAsyncThunk(
   async (submissionData, { rejectWithValue }) => {
     try {
       const response = await challengeApi.submitChallenge(submissionData);
-      return response.data;
+      if (response?.success) {
+        return response;
+      }
+      return rejectWithValue(response?.response?.data?.message || response?.message);
     } catch (error) {
       return rejectWithValue(error?.message || 'Failed to submit challenge');
     }
