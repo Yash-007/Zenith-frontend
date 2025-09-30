@@ -37,17 +37,7 @@ export const challengeApi = {
   getAllChallenges: () => api.get('/challenge/all'),
   getUserChallenges: () => api.get('/challenge/user'),
   getChallenge: (id) => api.get(`/challenge?id=${id}`),
-  submitChallenge: (data) => {
-    const formData = new FormData();
-    Object.keys(data).forEach(key => {
-      if (key === 'images' || key === 'videos') {
-        data[key]?.forEach(file => {
-          formData.append(key, file);
-        });
-      } else {
-        formData.append(key, data[key]);
-      }
-    });
+  submitChallenge: (formData) => {
     return api.post('/submission/submit', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

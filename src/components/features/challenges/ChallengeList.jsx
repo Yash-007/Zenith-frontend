@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import ChallengeCard from './ChallengeCard';
 import InterestFilter from './InterestFilter';
 import { 
@@ -11,7 +12,19 @@ import {
 } from '../../../store/slices/challengeSlice';
 export default function ChallengeList() {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [selectedInterests, setSelectedInterests] = useState([]);
+  const [successMessage, setSuccessMessage] = useState(location.state?.message || null);
+
+  // Clear success message after 5 seconds
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
   
   const challengesByInterest = useSelector(selectChallengesByInterest);
   const pendingChallenge = useSelector(selectPendingChallenge);
@@ -69,6 +82,19 @@ export default function ChallengeList() {
 
   return (
     <div className="space-y-8">
+      {successMessage && (
+        <div className="bg-green-50 border border-green-100 rounded-xl p-4 flex items-center animate-fade-in">
+          <div className="flex-shrink-0">
+            <svg className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <p className="ml-3 text-sm font-medium text-green-800">
+            {successMessage}
+          </p>
+        </div>
+      )}
+
       <InterestFilter 
         onFilterChange={setSelectedInterests}
         challengesByInterest={challengesByInterest}

@@ -1,5 +1,6 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectIsAuthenticated, fetchCurrentUser } from './store/slices/authSlice'
@@ -29,6 +30,27 @@ function App() {
 
   return (
     <Router>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          success: {
+            duration: 5000,
+            style: {
+              background: '#E8F5E9',
+              color: '#1B5E20',
+              border: '1px solid #A5D6A7'
+            },
+          },
+          error: {
+            duration: 5000,
+            style: {
+              background: '#FFEBEE',
+              color: '#B71C1C',
+              border: '1px solid #FFCDD2'
+            },
+          },
+        }}
+      />
       <Routes>
         <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/challenges" />} />
         <Route path="/register" element={!isAuthenticated ? <RegisterPage /> : <Navigate to="/challenges" />} />

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrowLeftIcon, ClockIcon, SparklesIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { selectAllCategories } from '../../store/slices/categorySlice';
+import { selectCurrentUser, fetchCurrentUser } from '../../store/slices/authSlice';
 import { challengeApi } from '../../services/api';
 
 // Temporary dummy data for longDescription
@@ -39,6 +41,7 @@ export default function ChallengeDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const categories = useSelector(selectAllCategories);
+  const currentUser = useSelector(selectCurrentUser);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -230,12 +233,6 @@ export default function ChallengeDetail() {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
         <h2 className="text-xl font-bold text-gray-900 mb-6">Submit Your Challenge</h2>
 
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-lg text-red-600">
-            {error}
-          </div>
-        )}
-
         <form onSubmit={async (e) => {
           e.preventDefault();
           if (!formData.description.trim()) {
@@ -251,18 +248,49 @@ export default function ChallengeDetail() {
           setIsSubmitting(true);
           
           try {
-            const submitData = {
-              challengeId: id,
-              description: formData.description.trim(),
-              images: formData.images
-            };
+            if (!currentUser?.id) {
+              throw new Error('User not found. Please try logging in again.');
+            }
+
+            const submitData = new FormData();
+            submitData.append('userId', currentUser.id);
+            submitData.append('challengeId', id);
+            submitData.append('status', 'PENDING');
+            submitData.append('isChallengeExists', 'true');
             
-            await challengeApi.submitChallenge(submitData);
-            navigate('/challenges', { 
-              state: { message: 'Challenge submitted successfully! Our team will review it shortly.' }
+            // Optional fields
+            if (formData.description.trim()) {
+              submitData.append('text', formData.description.trim());
+            }
+            
+            // Append images if any (max 5)
+            formData.images.slice(0, 5).forEach(image => {
+              submitData.append('images', image);
             });
+            
+            try {
+              const response = await challengeApi.submitChallenge(submitData);
+              
+              if (response.success) {
+                // Fetch updated user data (for streaks, points, etc.)
+                await dispatch(fetchCurrentUser());
+                toast.success('Challenge submitted successfully! Our team will review it shortly.');
+                navigate('/challenges');
+              } else {
+                console.log('Submit Challenge Response:', response);
+                toast.error('Failed to submit challenge');
+                setIsSubmitting(false);
+              }
+            } catch (error) {
+              // Extract error message from response
+              console.log('Submit Challenge Error:', error);
+              const errorMessage = 'Failed to submit challenge';
+              toast.error(errorMessage);
+              setIsSubmitting(false);
+            }
           } catch (err) {
-            setError(err.message || 'Failed to submit challenge. Please try again.');
+            console.error('Submit Challenge Error:', err);
+            toast.error('Failed to submit challenge. Please try again.');
             setIsSubmitting(false);
           }
         }}>
@@ -372,6 +400,20 @@ export default function ChallengeDetail() {
               </p>
             </div>
           </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-lg flex items-start">
+              <div className="flex-shrink-0 mt-0.5">
+                <svg className="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            </div>
+          )}
 
           {/* Submit Button */}
           <div className="flex justify-end">
