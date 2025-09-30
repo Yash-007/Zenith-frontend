@@ -6,6 +6,7 @@ import { selectIsAuthenticated, fetchCurrentUser } from './store/slices/authSlic
 import Layout from './components/layout/Layout'
 import HomePage from './pages/home'
 import ChallengesPage from './pages/challenges'
+import ChallengeDetailPage from './pages/challenges/[id]'
 import LoginPage from './pages/auth/login'
 import RegisterPage from './pages/auth/register'
 
@@ -42,6 +43,14 @@ function App() {
           <ProtectedRoute>
             <Layout>
               <ChallengesPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/challenges/:id" element={
+          <ProtectedRoute>
+            <Layout>
+              <ChallengeDetailPage />
             </Layout>
           </ProtectedRoute>
         } />

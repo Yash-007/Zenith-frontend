@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { selectAllCategories } from '../../../store/slices/categorySlice';
 
 const levelConfig = {
@@ -24,9 +25,14 @@ const formatTime = (minutes) => {
 };
 
 export default function ChallengeCard({ challenge }) {
+  const navigate = useNavigate();
   const categories = useSelector(selectAllCategories);
   const category = categories.find(cat => cat.id === challenge.category);
   const level = levelConfig[challenge.level] || levelConfig[1];
+
+  const handleClick = () => {
+    navigate(`/challenges/${challenge.id}`);
+  };
 
   return (
     <div className="group relative bg-white rounded-2xl transition-all duration-300
@@ -83,14 +89,17 @@ export default function ChallengeCard({ challenge }) {
           </div>
 
           {/* Action Button */}
-          <button className="relative inline-flex items-center justify-center text-sm font-semibold
-            text-white px-6 py-2 rounded-lg overflow-hidden
-            transition-all duration-300 ease-out
-            bg-gradient-to-r from-indigo-500 to-purple-500
-            hover:from-indigo-600 hover:to-purple-600
-            focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2
-            transform hover:scale-[1.02] active:scale-[0.98]">
-            Start Now
+          <button
+            onClick={handleClick}
+            className="relative inline-flex items-center justify-center text-sm font-semibold
+              text-white px-6 py-2 rounded-lg overflow-hidden
+              transition-all duration-300 ease-out
+              bg-gradient-to-r from-indigo-500 to-purple-500
+              hover:from-indigo-600 hover:to-purple-600
+              focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2
+              transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            View Details
             <svg className="w-4 h-4 ml-2 -mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>

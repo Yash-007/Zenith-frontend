@@ -36,7 +36,7 @@ api.interceptors.response.use(
 export const challengeApi = {
   getAllChallenges: () => api.get('/challenge/all'),
   getUserChallenges: () => api.get('/challenge/user'),
-  getChallenge: (id) => api.get(`/challenge/${id}`),
+  getChallenge: (id) => api.get(`/challenge?id=${id}`),
   submitChallenge: (data) => {
     const formData = new FormData();
     Object.keys(data).forEach(key => {
