@@ -36,7 +36,7 @@ export default function SubmissionDetail() {
           id: "submission_123",
           userId: "user_123",
           isChallengeExists: true, // Try changing to false to see different view
-          challengeId: "challenge_123",
+          challengeId: "f87c2e94-effc-457d-b5e6-297e9d09ea07",
           status: "PENDING", // Try: PENDING, COMPLETED, REJECTED
           proofs: {
             text: "Today I focused on improving my coding skills by completing a challenging algorithm problem. I broke down the problem into smaller steps, implemented each part carefully, and tested thoroughly. This helped me better understand dynamic programming concepts.",
@@ -48,7 +48,7 @@ export default function SubmissionDetail() {
           },
           submittedAt: "2025-03-15T10:00:00Z",
           challengeDetails: {
-            id: "challenge_123",
+            id: "f87c2e94-effc-457d-b5e6-297e9d09ea07",
             title: "Master Dynamic Programming",
             description: "Solve complex algorithmic problems using dynamic programming approach",
             category: 1,
@@ -138,25 +138,45 @@ export default function SubmissionDetail() {
 
       {/* Status Header */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center space-x-3">
-            <h1 className="text-2xl font-bold text-gray-900">
-              {isChallengeExists ? (
-                <>
-                  <span className="text-gray-600 font-normal">Challenge:</span> {challengeDetails.title}
-                </>
-              ) : (
-                'Custom Submission'
-              )}
-            </h1>
-          </div>
-          <div className={`px-4 py-1.5 rounded-full text-sm font-medium ${statusInfo.color}`}>
-            {statusInfo.label}
-          </div>
-        </div>
-        <p className="text-gray-600 text-sm">
-          Submitted on {submissionDate}
-        </p>
+        {isChallengeExists ? (
+          <button
+            onClick={() => navigate(`/challenges/${challengeDetails.id}`)}
+            className="w-full text-left group"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center space-x-3">
+                <h1 className="text-2xl font-bold text-gray-900">
+                  <span className="text-gray-600 font-normal">Challenge: </span>
+                  <span className="group-hover:text-primary-600 transition-colors duration-200">
+                    {challengeDetails.title}
+                  </span>
+                </h1>
+              </div>
+              <div className={`px-4 py-1.5 rounded-full text-sm font-medium ${statusInfo.color}`}>
+                {statusInfo.label}
+              </div>
+            </div>
+            <p className="text-gray-600 text-sm">
+              Submitted on {submissionDate}
+            </p>
+          </button>
+        ) : (
+          <>
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center space-x-3">
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Custom Submission
+                </h1>
+              </div>
+              <div className={`px-4 py-1.5 rounded-full text-sm font-medium ${statusInfo.color}`}>
+                {statusInfo.label}
+              </div>
+            </div>
+            <p className="text-gray-600 text-sm">
+              Submitted on {submissionDate}
+            </p>
+          </>
+        )}
       </div>
 
       {/* Submission Content */}
