@@ -15,7 +15,16 @@ export default function ChallengeList() {
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedInterests, setSelectedInterests] = useState([]);
-  const [successMessage, setSuccessMessage] = useState(location.state?.message || null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  // Set and clear success message from location state
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message);
+      // Clear the location state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   // Clear success message after 5 seconds
   useEffect(() => {
