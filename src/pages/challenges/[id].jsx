@@ -79,6 +79,7 @@ export default function ChallengeDetail() {
             ...response.data,
             isSubmitted: true, // Try changing to false to see submission form
             SubmissionStatus: 'REJECTED', // Try: 'PENDING', 'COMPLETED', 'REJECTED'
+            submissionId: 'a02877b3-6dc7-4a83-8aa8-6486ffd4efa9',
           };
           setChallenge(testData);
         } else {

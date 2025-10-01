@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ChallengeCard from './ChallengeCard';
 import InterestFilter from './InterestFilter';
 import { 
@@ -13,6 +13,7 @@ import {
 export default function ChallengeList() {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [successMessage, setSuccessMessage] = useState(location.state?.message || null);
 
@@ -112,11 +113,29 @@ export default function ChallengeList() {
 
       <div className="bg-white rounded-2xl shadow-soft p-6">
         <div className="flex items-center justify-between mb-6">
-          <div>
+          <div className="flex-1">
             <h2 className="text-2xl font-bold text-gray-900">Available Challenges</h2>
             <p className="text-gray-600 mt-1">Choose from our curated list of challenges</p>
           </div>
-          {/* Add sorting options here later */}
+          <div className="flex items-start space-x-6">
+            <div className="max-w-xs text-right">
+              <p className="text-sm text-gray-600 mb-2">
+                Can't find a suitable challenge? Share what meaningful you've done today!
+              </p>
+              <button
+                onClick={() => navigate('/submissions/custom')}
+                className="inline-flex items-center px-5 py-2.5 rounded-xl
+                  text-sm font-medium transition-all duration-200 ease-out
+                  bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600
+                  text-white shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 4v16m8-8H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Submit Custom Challenge
+              </button>
+            </div>
+          </div>
         </div>
         
         {availableChallenges.length > 0 ? (

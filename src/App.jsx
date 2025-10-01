@@ -8,6 +8,8 @@ import Layout from './components/layout/Layout'
 import HomePage from './pages/home'
 import ChallengesPage from './pages/challenges'
 import ChallengeDetailPage from './pages/challenges/[id]'
+import CustomSubmissionPage from './pages/submissions/custom'
+import SubmissionDetailPage from './pages/submissions/[id]'
 import LoginPage from './pages/auth/login'
 import RegisterPage from './pages/auth/register'
 
@@ -73,6 +75,22 @@ function App() {
           <ProtectedRoute>
             <Layout>
               <ChallengeDetailPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/submissions/custom" element={
+          <ProtectedRoute>
+            <Layout>
+              <CustomSubmissionPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/submissions/:id" element={
+          <ProtectedRoute>
+            <Layout>
+              <SubmissionDetailPage />
             </Layout>
           </ProtectedRoute>
         } />
