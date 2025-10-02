@@ -28,37 +28,25 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     const fetchSubmissionDetails = async () => {
+      if (!id) {
+        setError('Invalid submission ID');
+        setIsLoading(false);
+        return;
+      }
+
       try {
         setIsLoading(true);
         setError(null);
-        // For now using dummy data
-        const dummyData = {
-          id: "submission_123",
-          userId: "user_123",
-          isChallengeExists: true, // Try changing to false to see different view
-          challengeId: "f87c2e94-effc-457d-b5e6-297e9d09ea07",
-          status: "PENDING", // Try: PENDING, COMPLETED, REJECTED
-          proofs: {
-            text: "Today I focused on improving my coding skills by completing a challenging algorithm problem. I broke down the problem into smaller steps, implemented each part carefully, and tested thoroughly. This helped me better understand dynamic programming concepts.",
-            images: [
-              "https://picsum.photos/400/400",
-              "https://picsum.photos/401/400",
-              "https://picsum.photos/402/400"
-            ]
-          },
-          submittedAt: "2025-03-15T10:00:00Z",
-          challengeDetails: {
-            id: "f87c2e94-effc-457d-b5e6-297e9d09ea07",
-            title: "Master Dynamic Programming",
-            description: "Solve complex algorithmic problems using dynamic programming approach",
-            category: 1,
-            time: 60,
-            points: 150,
-            level: 2
-          }
-        };
         
-        setSubmission(dummyData);
+        const response = await submissionApi.getSubmissionDetails(id);
+        
+        if (response.success && response.data) {
+          setSubmission({
+            ...response.data,
+          });
+        } else {
+          throw new Error(response.message || 'Failed to load submission details');
+        }
       } catch (err) {
         console.error('Submission Load Error:', err);
         setError(err?.message || 'Failed to load submission details');
@@ -114,8 +102,6 @@ export default function SubmissionDetail() {
   }
 
   const { status, proofs, submittedAt, isChallengeExists, challengeDetails } = submission;
-  const category = isChallengeExists ? categories.find(cat => cat.id === challengeDetails.category) : null;
-  const levelInfo = isChallengeExists ? levelMap[challengeDetails.level] : null;
   const statusInfo = statusMap[status];
   const submissionDate = new Date(submittedAt).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -140,7 +126,7 @@ export default function SubmissionDetail() {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
         {isChallengeExists ? (
           <button
-            onClick={() => navigate(`/challenges/${challengeDetails.id}`)}
+            onClick={() => navigate(`/challenges/${submission.challengeId}`)}
             className="w-full text-left group"
           >
             <div className="flex items-center justify-between mb-2">
@@ -148,7 +134,7 @@ export default function SubmissionDetail() {
                 <h1 className="text-2xl font-bold text-gray-900">
                   <span className="text-gray-600 font-normal">Challenge: </span>
                   <span className="group-hover:text-primary-600 transition-colors duration-200">
-                    {challengeDetails.title}
+                    {submission.challengeName}
                   </span>
                 </h1>
               </div>
@@ -184,26 +170,30 @@ export default function SubmissionDetail() {
         <h2 className="text-xl font-bold text-gray-900 mb-6">Submission Details</h2>
         
         {/* Text Response */}
-        {proofs.text && (
+        {submission?.proofs?.text && (
           <div className="mb-8">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
             <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-gray-700 whitespace-pre-wrap">{proofs.text}</p>
+              <p className="text-gray-700 whitespace-pre-wrap">{submission.proofs.text}</p>
             </div>
           </div>
         )}
 
         {/* Images */}
-        {proofs.images?.length > 0 && (
+        {submission?.proofs?.images?.length > 0 && (
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Photos</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {proofs.images.map((image, index) => (
+              {submission.proofs.images.map((image, index) => (
                 <div key={index} className="aspect-square rounded-lg overflow-hidden">
                   <img 
                     src={image} 
                     alt={`Submission ${index + 1}`} 
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiNGM0Y0RjYiLz48cGF0aCBkPSJNMTg2IDEzMkgyMTRWMTYwSDE4NlYxMzJaTTE4NiAxODhIMjE0VjI2OEgxODZWMTg4WiIgZmlsbD0iIzk0QTNCOCIvPjwvc3ZnPg==';
+                      e.target.classList.add('bg-gray-100');
+                    }}
                   />
                 </div>
               ))}

@@ -74,14 +74,7 @@ export default function ChallengeDetail() {
         setLoadError(null);
         const response = await challengeApi.getChallenge(id);
         if (response.success) {
-          // Add test submission data to API response
-          const testData = {
-            ...response.data,
-            isSubmitted: true, // Try changing to false to see submission form
-            SubmissionStatus: 'REJECTED', // Try: 'PENDING', 'COMPLETED', 'REJECTED'
-            submissionId: 'a02877b3-6dc7-4a83-8aa8-6486ffd4efa9',
-          };
-          setChallenge(testData);
+          setChallenge(response.data);
         } else {
           const errorMessage = response?.response?.data?.message || 'Failed to load challenge';
           console.log('Challenge Load Error:', { response });
@@ -263,12 +256,12 @@ export default function ChallengeDetail() {
             <div className="flex items-center space-x-4">
               <h2 className="text-xl font-bold text-gray-900">Challenge Submitted</h2>
               <div className={`px-4 py-1.5 rounded-full text-sm font-medium ${
-                challenge.SubmissionStatus === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                challenge.SubmissionStatus === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                challenge.submissionStatus === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                challenge.submissionStatus === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
                 'bg-red-100 text-red-800'
               }`}>
-                {challenge.SubmissionStatus === 'COMPLETED' ? 'Completed' :
-                 challenge.SubmissionStatus === 'PENDING' ? 'Under Review' :
+                {challenge.submissionStatus === 'COMPLETED' ? 'Completed' :
+                 challenge.submissionStatus === 'PENDING' ? 'Under Review' :
                  'Rejected'}
               </div>
             </div>
