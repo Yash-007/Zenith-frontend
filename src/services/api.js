@@ -65,7 +65,23 @@ export const userApi = {
   login: (credentials) => api.post('/user/login', credentials),
   register: (userData) => api.post('/user/register', userData),
   getCurrentUser: () => api.get('/user'),
-  getLeaderboard: (params) => api.get('/user/leaderboard', { params }),
+  getLeaderboard: ({ page, lowerAge, upperAge, city, fetchUser }) => {
+    const params = {
+      ...(page && { page }),
+      ...(lowerAge && { lowerAge }),
+      ...(upperAge && { upperAge }),
+      ...(city && { city: city.toUpperCase() }),
+      ...(fetchUser && { fetchUser }),
+      _t: Date.now() // Add timestamp to prevent caching
+    };
+    return api.get('/user/leaderboard', { 
+      params,
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
+    });
+  },
 };
 
 export const rewardApi = {

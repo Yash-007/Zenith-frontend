@@ -11,6 +11,7 @@ import ChallengeDetailPage from './pages/challenges/[id]'
 import CustomSubmissionPage from './pages/submissions/custom'
 import SubmissionDetailPage from './pages/submissions/[id]'
 import ProfilePage from './pages/profile'
+import LeaderboardPage from './pages/leaderboard'
 import LoginPage from './pages/auth/login'
 import RegisterPage from './pages/auth/register'
 
@@ -100,6 +101,14 @@ function App() {
           <ProtectedRoute>
             <Layout>
               <ProfilePage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/leaderboard" element={
+          <ProtectedRoute>
+            <Layout>
+              <LeaderboardPage />
             </Layout>
           </ProtectedRoute>
         } />
