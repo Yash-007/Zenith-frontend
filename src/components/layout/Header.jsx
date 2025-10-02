@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import { selectIsAuthenticated, logout } from '../../store/slices/authSlice';
 
 const publicNavigation = [
@@ -18,9 +18,23 @@ const privateNavigation = [
 
 export default function Header() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef(null);
+
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+        setProfileMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   
   const navigation = isAuthenticated ? privateNavigation : publicNavigation;
   
@@ -63,15 +77,43 @@ export default function Header() {
 
             {/* Auth Buttons */}
             {isAuthenticated ? (
-              <button
-                onClick={handleLogout}
-                className="ml-6 inline-flex items-center justify-center px-4 py-2 rounded-xl
-                  text-sm font-medium transition-all duration-200 ease-out
-                  bg-white text-gray-700 hover:text-gray-900 border border-gray-200
-                  hover:bg-gray-50 shadow-sm hover:shadow"
-              >
-                Sign Out
-              </button>
+              <div className="relative" ref={profileMenuRef}>
+                <button
+                  onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-xl
+                    text-sm font-medium transition-colors duration-200
+                    text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                >
+                  <UserCircleIcon className="w-5 h-5" />
+                  <span>Account</span>
+                </button>
+
+                {/* Profile Dropdown */}
+                {profileMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1">
+                    <button
+                      onClick={() => {
+                        navigate('/profile');
+                        setProfileMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 
+                        hover:text-gray-900 transition-colors duration-200"
+                    >
+                      View Profile
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setProfileMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 
+                        hover:text-gray-900 transition-colors duration-200"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <div className="flex items-center space-x-3">
                 <Link
@@ -122,18 +164,31 @@ export default function Header() {
                 </NavLink>
               ))}
               {isAuthenticated ? (
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="mt-2 w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl
-                    text-base font-medium transition-all duration-200 ease-out
-                    bg-white text-gray-700 hover:text-gray-900 border border-gray-200
-                    hover:bg-gray-50"
-                >
-                  Sign Out
-                </button>
+                <>
+                  <button
+                    onClick={() => {
+                      navigate('/profile');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-2 text-base font-medium text-gray-900 hover:text-purple-600
+                      transition-colors duration-200"
+                  >
+                    <UserCircleIcon className="w-5 h-5" />
+                    <span>View Profile</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="mt-2 w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl
+                      text-base font-medium transition-all duration-200 ease-out
+                      bg-white text-gray-700 hover:text-gray-900 border border-gray-200
+                      hover:bg-gray-50"
+                  >
+                    Sign Out
+                  </button>
+                </>
               ) : (
                 <>
                   <Link
