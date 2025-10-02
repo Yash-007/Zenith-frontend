@@ -126,7 +126,7 @@ export default function ChallengeDetail() {
           className="mb-6 inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
         >
           <ArrowLeftIcon className="h-5 w-5 mr-2" />
-          Back to Challenges
+          Go Back 
         </button>
         <div className="text-center py-12">
           <p className="text-xl font-semibold text-red-600 mb-2">Failed to load challenge</p>
@@ -148,7 +148,7 @@ export default function ChallengeDetail() {
         className="mb-6 inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
       >
         <ArrowLeftIcon className="h-5 w-5 mr-2" />
-        Back to Challenges
+        Go Back 
       </button>
 
       {/* Challenge Header */}

@@ -10,6 +10,7 @@ import ChallengesPage from './pages/challenges'
 import ChallengeDetailPage from './pages/challenges/[id]'
 import CustomSubmissionPage from './pages/submissions/custom'
 import SubmissionDetailPage from './pages/submissions/[id]'
+import ProfilePage from './pages/profile'
 import LoginPage from './pages/auth/login'
 import RegisterPage from './pages/auth/register'
 
@@ -91,6 +92,14 @@ function App() {
           <ProtectedRoute>
             <Layout>
               <SubmissionDetailPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <Layout>
+              <ProfilePage />
             </Layout>
           </ProtectedRoute>
         } />
