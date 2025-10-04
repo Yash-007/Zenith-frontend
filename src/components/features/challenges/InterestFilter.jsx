@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import { fetchCategories, selectAllCategories } from '../../../store/slices/categorySlice';
 
 const categoryIcons = {
@@ -76,33 +77,40 @@ const categoryStyles = {
 export default function InterestFilter({ onFilterChange, challengesByInterest }) {
   const dispatch = useDispatch();
   const allCategories = useSelector(selectAllCategories);
-  const [selectedInterests, setSelectedInterests] = useState(new Set(['all']));
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedInterests, setSelectedInterests] = useState(() => {
+    const params = searchParams.get('interests');
+    return new Set(params ? params.split(',').map(Number) : [0]);
+  });
 
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
+
+  
   const availableCategories = [
-    { id: 'all', name: 'All' },
-    ...allCategories.filter(category => challengesByInterest.hasOwnProperty(category.id))
+    { id: 0, name: 'All' },
+    ...allCategories.filter(category => challengesByInterest.hasOwnProperty(category.id)),
+    {id: -1, name: 'Others'}
   ];
 
   const toggleCategory = (categoryId) => {
     const newSelected = new Set();
     
-    if (categoryId === 'all') {
-      if (!selectedInterests.has('all')) {
-        newSelected.add('all');
+    if (categoryId === 0) {
+      if (!selectedInterests.has(0)) {
+        newSelected.add(0);
       }
     } else {
       selectedInterests.forEach(id => {
-        if (id !== 'all') newSelected.add(id);
+        if (id !== 0) newSelected.add(id);
       });
       
       if (selectedInterests.has(categoryId)) {
         newSelected.delete(categoryId);
         if (newSelected.size === 0) {
-          newSelected.add('all');
+          newSelected.add(0);
         }
       } else {
         newSelected.add(categoryId);
@@ -110,12 +118,20 @@ export default function InterestFilter({ onFilterChange, challengesByInterest })
     }
 
     setSelectedInterests(newSelected);
-    const filteredCategories = Array.from(newSelected).filter(id => id !== 'all');
+    const filteredCategories = Array.from(newSelected).filter(id => id !== 0);
+    
+    // Update URL with selected interests
+    if (filteredCategories.length > 0) {
+      setSearchParams({ interests: filteredCategories.join(',') });
+    } else {
+      setSearchParams({});
+    }
+    
     onFilterChange(filteredCategories);
   };
 
   const getCategoryStyle = (category) => {
-    const id = category.id === 'all' ? 0 : Number(category.id);
+    const id = Number(category.id);
     return categoryStyles[id] || categoryStyles[7];
   };
 
@@ -125,12 +141,14 @@ export default function InterestFilter({ onFilterChange, challengesByInterest })
         <div className="flex-1">
           <h2 className="text-xl font-bold text-gray-900">Filter by Interest</h2>
         </div>
-        {selectedInterests.size > 0 && !selectedInterests.has('all') && (
+        {selectedInterests.size > 0 && !selectedInterests.has(0) && (
           <button
-            onClick={() => {
-              setSelectedInterests(new Set(['all']));
-              onFilterChange([]);
-            }}
+              onClick={() => {
+                setSelectedInterests(new Set([0]));
+                // Clear interests from URL
+                setSearchParams({});
+                onFilterChange([]);
+              }}
             className="inline-flex items-center px-3 py-1.5 text-sm font-medium
               rounded-lg transition-all duration-200 ease-out
               bg-white/80 backdrop-blur-sm border border-gray-200 

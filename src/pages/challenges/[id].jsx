@@ -195,7 +195,7 @@ export default function ChallengeDetail() {
           <div className="mb-8">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Challenge Details</h2>
             <div className="bg-gray-50 rounded-xl p-6">
-              <p className="text-gray-600 leading-relaxed">{DUMMY_LONG_DESCRIPTION}</p>
+              <p className="text-gray-600 leading-relaxed">{challenge.longDescription}</p>
             </div>
           </div>
 

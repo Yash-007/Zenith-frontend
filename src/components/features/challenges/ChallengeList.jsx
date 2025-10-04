@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import ChallengeCard from './ChallengeCard';
 import InterestFilter from './InterestFilter';
 import { 
@@ -14,7 +14,11 @@ export default function ChallengeList() {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const [selectedInterests, setSelectedInterests] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedInterests, setSelectedInterests] = useState(() => {
+    const params = searchParams.get('interests');
+    return params ? params.split(',').map(Number) : [];
+  });
   const [successMessage, setSuccessMessage] = useState(null);
 
   // Set and clear success message from location state
@@ -53,8 +57,8 @@ export default function ChallengeList() {
   // Get a random challenge as featured
   const getRandomChallenge = (challenges) => {
     if (!challenges.length) return null;
-    const randomIndex = Math.floor(Math.random() * challenges.length);
-    return challenges[randomIndex];
+    // const randomIndex = Math.floor(Math.random() * challenges.length);
+    return challenges[0];
   };
 
   const featuredChallenge = getRandomChallenge(filteredChallenges);
