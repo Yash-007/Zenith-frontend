@@ -12,6 +12,7 @@ import CustomSubmissionPage from './pages/submissions/custom'
 import SubmissionDetailPage from './pages/submissions/[id]'
 import ProfilePage from './pages/profile'
 import LeaderboardPage from './pages/leaderboard'
+import RewardsPage from './pages/rewards'
 import LoginPage from './pages/auth/login'
 import RegisterPage from './pages/auth/register'
 
@@ -109,6 +110,14 @@ function App() {
           <ProtectedRoute>
             <Layout>
               <LeaderboardPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/rewards" element={
+          <ProtectedRoute>
+            <Layout>
+              <RewardsPage />
             </Layout>
           </ProtectedRoute>
         } />

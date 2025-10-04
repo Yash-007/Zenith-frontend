@@ -86,7 +86,7 @@ export const userApi = {
 
 export const rewardApi = {
   getHistory: () => api.get('/reward/history'),
-  createEntry: (data) => api.post('/reward/entry', data),
+  redeem: (points) => api.post('/reward/redeem', { points }),
 };
 
 export default api;
