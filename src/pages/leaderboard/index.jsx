@@ -12,12 +12,15 @@ const ageRanges = [
   { label: '45+', value: '45+', lowerAge: 45, upperAge: 100 }
 ];
 
+const limitPerPage = 10;
+
 export default function LeaderboardPage() {
   const currentUser = useSelector(selectCurrentUser);
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [selectedAgeRange, setSelectedAgeRange] = useState('all');
   const [cityInput, setCityInput] = useState('');
   const [showFindMe, setShowFindMe] = useState(false);
@@ -45,7 +48,9 @@ export default function LeaderboardPage() {
         const response = await userApi.getLeaderboard(params);
         
         if (response.success) {
-          setUsers(response.data);
+          setUsers(response.data.users);
+          setCurrentPage(response.data.currentPage);
+          setTotalPages(response.data.totalPages);
         } else {
           throw new Error(response?.response?.data?.message || 'Failed to load leaderboard');
         }
@@ -72,9 +77,15 @@ export default function LeaderboardPage() {
     setCurrentPage(1);
   };
 
-  const handleFindMe = () => {
-    setShowFindMe(true);
+  const resetFilters = () => {
+    setSelectedAgeRange('all');
+    setCityInput('');
     setCurrentPage(1);
+  };
+
+  const handleFindMe = () => {
+    resetFilters(); // Reset all filters to default
+    setShowFindMe(true);
   };
 
   const handlePageChange = (newPage) => {
@@ -182,7 +193,7 @@ export default function LeaderboardPage() {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="divide-y divide-gray-100">
           {users.map((user, index) => {
-            const position = (currentPage - 1) * 10 + index + 1;
+            const position = (currentPage - 1) * limitPerPage + index + 1;
             const isCurrentUser = user.id === currentUser?.id;
 
             return (
@@ -207,22 +218,22 @@ export default function LeaderboardPage() {
                 {/* User Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">
-                    <div className="h-10 w-10 rounded-full bg-gray-200 flex-shrink-0">
-                      {user.avatar ? (
+                    <div className="relative h-10 w-10 rounded-full bg-gradient-to-br from-purple-100 to-indigo-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                      {user.avatar && (
                         <img 
                           src={user.avatar} 
                           alt={user.name}
-                          className="h-10 w-10 rounded-full object-cover"
+                          className="absolute inset-0 w-full h-full object-cover"
                           onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" fill="%23CBD5E1"/><text x="50%" y="50%" font-family="Arial" font-size="16" fill="%2394A3B8" text-anchor="middle" dy=".3em">${user.name.charAt(0)}</text></svg>`;
+                            e.target.style.display = 'none';
                           }}
                         />
-                      ) : (
-                        <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-lg font-medium">
-                          {user.name.charAt(0)}
-                        </div>
                       )}
+                      <span className="text-lg font-medium" style={{
+                        color: `hsl(${Math.abs(user.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)) % 360}, 70%, 45%)`
+                      }}>
+                        {user.name.charAt(0).toUpperCase()}
+                      </span>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-900 truncate flex items-center">
@@ -267,18 +278,18 @@ export default function LeaderboardPage() {
         <div className="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
+            disabled={currentPage <= 1}
             className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900
               disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Previous
           </button>
           <span className="text-sm text-gray-600">
-            Page {currentPage}
+            Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
-            disabled={users.length < 10}
+            disabled={currentPage >= totalPages}
             className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900
               disabled:opacity-50 disabled:cursor-not-allowed"
           >
