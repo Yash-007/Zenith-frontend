@@ -16,56 +16,56 @@ const categoryIcons = {
 
 // Modern gradient color combinations by category ID
 const categoryStyles = {
-  0: { // All
+  0: {
     base: 'bg-gradient-to-r from-[#2DD4BF] to-[#0EA5E9]',
     light: 'bg-gradient-to-r from-teal-50 to-sky-50',
     border: 'hover:border-teal-200',
     shadow: 'shadow-teal-500/25',
     text: 'text-teal-700'
   },
-  1: { // Physical Wellness
+  1: {
     base: 'bg-gradient-to-r from-[#F87171] to-[#EC4899]',
     light: 'bg-gradient-to-r from-red-50 to-pink-50',
     border: 'hover:border-red-200',
     shadow: 'shadow-red-500/25',
     text: 'text-red-700'
   },
-  2: { // Mental Fitness
+  2: {
     base: 'bg-gradient-to-r from-[#8B5CF6] to-[#6366F1]',
     light: 'bg-gradient-to-r from-violet-50 to-indigo-50',
     border: 'hover:border-violet-200',
     shadow: 'shadow-violet-500/25',
     text: 'text-violet-700'
   },
-  3: { // Social Impact
+  3: {
     base: 'bg-gradient-to-r from-[#34D399] to-[#059669]',
     light: 'bg-gradient-to-r from-emerald-50 to-green-50',
     border: 'hover:border-emerald-200',
     shadow: 'shadow-emerald-500/25',
     text: 'text-emerald-700'
   },
-  4: { // Skill Development
+  4: {
     base: 'bg-gradient-to-r from-[#FB923C] to-[#DB2777]',
     light: 'bg-gradient-to-r from-orange-50 to-pink-50',
     border: 'hover:border-orange-200',
     shadow: 'shadow-orange-500/25',
     text: 'text-orange-700'
   },
-  5: { // Financial Wellness
+  5: {
     base: 'bg-gradient-to-r from-[#38BDF8] to-[#818CF8]',
     light: 'bg-gradient-to-r from-sky-50 to-indigo-50',
     border: 'hover:border-sky-200',
     shadow: 'shadow-sky-500/25',
     text: 'text-sky-700'
   },
-  6: { // Personal Growth
+  6: {
     base: 'bg-gradient-to-r from-[#A78BFA] to-[#EC4899]',
     light: 'bg-gradient-to-r from-purple-50 to-pink-50',
     border: 'hover:border-purple-200',
     shadow: 'shadow-purple-500/25',
     text: 'text-purple-700'
   },
-  7: { // Others
+  7: {
     base: 'bg-gradient-to-r from-[#64748B] to-[#475569]',
     light: 'bg-gradient-to-r from-slate-50 to-gray-50',
     border: 'hover:border-slate-200',
@@ -181,9 +181,6 @@ export default function InterestFilter({ onFilterChange, challengesByInterest })
                 }
               `}
             >
-              <span className="text-xl">
-                {categoryIcons[category.name] || '📋'}
-              </span>
               <span className={`text-sm font-medium whitespace-nowrap ${
                 isSelected ? 'text-white' : style.text
               }`}>

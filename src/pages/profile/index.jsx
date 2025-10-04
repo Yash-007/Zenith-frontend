@@ -16,29 +16,35 @@ export default function ProfilePage() {
   const [recentSubmissions, setRecentSubmissions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchRecentSubmissions = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const response = await submissionApi.getUserSubmissions();
+        const response = await submissionApi.getUserSubmissions(currentPage);
         
         if (response.success) {
-          setRecentSubmissions(response.data);
+          setRecentSubmissions(response.data.submissions);
+          if (response.data.currentPage !== currentPage) {
+            setCurrentPage(response.data.currentPage);
+          }
+          setTotalPages(response.data.totalPages);
         } else {
-          throw new Error(response.message || 'Failed to load submissions');
+          throw new Error(response?.response?.data?.message || 'Failed to load submissions');
         }
       } catch (err) {
         console.error('Submissions Load Error:', err);
-        setError(err?.message || 'Failed to load submissions');
+        setError('Failed to load submissions' || err?.message);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchRecentSubmissions();
-  }, []);
+  }, [currentPage]);
 
   if (!currentUser) {
     return (
@@ -178,9 +184,9 @@ export default function ProfilePage() {
             <p className="text-lg text-red-600">Something went wrong!</p>
             <p className="text-sm text-gray-500 mt-2">{error}</p>
           </div>
-        ) : recentSubmissions.length > 0 ? (
+        ) : recentSubmissions?.length > 0 ? (
           <div className="space-y-4">
-            {recentSubmissions.map((submission) => (
+            {recentSubmissions?.map((submission) => (
               <button
                 key={submission.id}
                 onClick={() => navigate(`/submissions/${submission.id}`)}
@@ -199,6 +205,42 @@ export default function ProfilePage() {
                 </p>
               </button>
             ))}
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="mt-6 flex items-center justify-between border-t border-gray-200 pt-4">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200
+                    ${currentPage === 1
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300'
+                    }`}
+                >
+                  <svg className="w-5 h-5 mr-1" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Previous
+                </button>
+                <span className="text-sm text-gray-700">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200
+                    ${currentPage === totalPages
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300'
+                    }`}
+                >
+                  Next
+                  <svg className="w-5 h-5 ml-1" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-center py-12">

@@ -48,7 +48,7 @@ export const challengeApi = {
 
 export const submissionApi = {
   getSubmissionDetails: (submissionId) => api.get(`/submission?submissionId=${submissionId}`),
-  getUserSubmissions: () => api.get('/submission/recent'),
+  getUserSubmissions: (page = 1) => api.get(`/submission/all?page=${page}`),
 };
 
 export const categoryApi = {
