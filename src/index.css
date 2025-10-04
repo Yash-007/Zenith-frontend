@@ -5,6 +5,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Heatmap customization */
+.react-calendar-heatmap .color-scale-1 {
+  fill: #d1e8ff;
+}
+
+.react-calendar-heatmap .color-scale-2 {
+  fill: #a3d1ff;
+}
+
+.react-calendar-heatmap .color-scale-3 {
+  fill: #75baff;
+}
+
+.react-calendar-heatmap .color-scale-4 {
+  fill: #47a3ff;
+}
+
+.react-calendar-heatmap .color-scale-5 {
+  fill: #198cff;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

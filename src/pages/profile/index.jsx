@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectCurrentUser } from '../../store/slices/authSlice';
 import { submissionApi } from '../../services/api';
+import SubmissionHeatmap from '../../components/features/profile/SubmissionHeatmap';
 
 const statusMap = {
   'PENDING': { label: 'Under Review', color: 'bg-yellow-100 text-yellow-800' },
@@ -165,6 +166,9 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      {/* Submission Heatmap */}
+      <SubmissionHeatmap submissions={recentSubmissions} />
 
       {/* Recent Submissions */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
