@@ -11,9 +11,9 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
-    // if (token) {
-      config.headers['X-Auth-Token'] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5ZjA2NzA2Yi00YWJhLTQ0NjktODQ1ZC1hN2JmODQxZDc0NWEiLCJpYXQiOjE3NTg5ODAxNzEsImV4cCI6MTc1OTU4NDk3MX0.SESSbp93hEFXvp8a5cxTKEGmCR3_rc-jjjUokQxeLpk";
-    // }
+    if (token) {
+      config.headers['X-Auth-Token'] = token;
+    }
     return config;
   },
   (error) => {
