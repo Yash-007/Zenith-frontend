@@ -44,7 +44,7 @@ export default function SubmissionHeatmap() {
     }
     return {
       'data-tooltip-id': 'heatmap-tooltip',
-      'data-tooltip-content': `${value.count} submission${value.count !== 1 ? 's' : ''} on ${new Date(value.date).toLocaleDateString()}`
+      'data-tooltip-content': `${value.count} submission${value.count !== 1 ? 's' : ''} on ${new Date(value.date).toLocaleDateString('en-IN')}`
     };
   };
 
