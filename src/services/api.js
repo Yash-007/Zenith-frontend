@@ -89,4 +89,9 @@ export const rewardApi = {
   redeem: (points) => api.post('/reward/redeem', { points }),
 };
 
+export const chatApi = {
+  sendQuery: (query) => api.post('/chat/query', { query }),
+  getChatHistory: () => api.get('/chat/all'),
+};
+
 export default api;

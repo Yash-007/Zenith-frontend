@@ -13,6 +13,7 @@ import SubmissionDetailPage from './pages/submissions/[id]'
 import ProfilePage from './pages/profile'
 import LeaderboardPage from './pages/leaderboard'
 import RewardsPage from './pages/rewards'
+import CoachPage from './pages/coach'
 import LoginPage from './pages/auth/login'
 import RegisterPage from './pages/auth/register'
 
@@ -118,6 +119,14 @@ function App() {
           <ProtectedRoute>
             <Layout>
               <RewardsPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/coach" element={
+          <ProtectedRoute>
+            <Layout>
+              <CoachPage />
             </Layout>
           </ProtectedRoute>
         } />
