@@ -20,19 +20,19 @@ const levelMap = {
 
 const submissionTypeMap = {
   'TEXT': { 
-    name: 'Share Your Journey', 
+    name: 'Share Your Story', 
     icon: '📝', 
-    description: 'Tell us about your experience with this challenge',
-    note: 'This is your space to reflect on your journey and growth. Your insights might inspire others on similar paths!',
-    placeholder: 'Some things you might want to share:\n• How did you approach this challenge?\n• What did you discover about yourself?\n• What made you feel proud?\n• What would you do differently next time?'
+    description: 'Tell us about your experience',
+    note: 'Your insights can inspire others!',
+    placeholder: '• How did you approach it?\n• What did you learn?\n• What are you proud of?\n• What would you do differently?\n\nFeel free to share anything else - your journey matters!'
   },
   'IMAGE': { 
-    name: 'Capture Your Progress', 
+    name: 'Add Photos', 
     icon: '📸', 
-    description: 'Add photos to celebrate your achievement',
-    note: 'Photos help track your progress and can be great motivation when looking back at your journey.',
-    requirements: 'JPG, PNG or GIF format, max 5MB each',
-    examples: 'Could be your workout session, a new skill you learned, or any moment you feel proud of!'
+    description: 'Show your achievement',
+    note: 'A picture is worth a thousand words!',
+    requirements: 'JPG/PNG/GIF, max 5MB each',
+    examples: 'Show us your progress - workout, new skill, or proud moment!'
   }
 };
 
@@ -201,30 +201,28 @@ export default function ChallengeDetail() {
 
           {/* Submission Requirements */}
           <div className="mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">How to Submit</h2>
-            <div className="bg-gray-50 rounded-xl p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Submit Below</h2>
+            <div className="bg-gray-50 rounded-xl p-4 sm:p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Text Submission */}
-                <div className="flex items-start space-x-4">
+                <div className="flex items-center space-x-3">
                   <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-indigo-100 text-indigo-600">
                     {submissionTypeMap.TEXT.icon}
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900 mb-1">{submissionTypeMap.TEXT.name}</h3>
+                    <h3 className="font-medium text-gray-900">{submissionTypeMap.TEXT.name}</h3>
                     <p className="text-gray-600 text-sm">{submissionTypeMap.TEXT.description}</p>
-                    <p className="text-gray-500 text-sm mt-2 italic">{submissionTypeMap.TEXT.placeholder}</p>
                   </div>
                 </div>
 
                 {/* Image Submission */}
-                <div className="flex items-start space-x-4">
+                <div className="flex items-center space-x-3">
                   <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-purple-100 text-purple-600">
                     {submissionTypeMap.IMAGE.icon}
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900 mb-1">{submissionTypeMap.IMAGE.name}</h3>
+                    <h3 className="font-medium text-gray-900">{submissionTypeMap.IMAGE.name}</h3>
                     <p className="text-gray-600 text-sm">{submissionTypeMap.IMAGE.description}</p>
-                    <p className="text-gray-500 text-sm mt-2 italic">{submissionTypeMap.IMAGE.requirements}</p>
                   </div>
                 </div>
               </div>
@@ -469,7 +467,7 @@ export default function ChallengeDetail() {
                 </svg>
               </div>
               <p className="ml-3 text-sm text-amber-700">
-                Your written response and photos will be considered during the review of your challenge completion.
+                Both text and photos will be reviewed for challenge completion.
               </p>
             </div>
           </div>
