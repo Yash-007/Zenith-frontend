@@ -95,15 +95,15 @@ export default function ChallengeList() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {successMessage && (
-        <div className="bg-green-50 border border-green-100 rounded-xl p-4 flex items-center animate-fade-in">
+        <div className="bg-green-50 border border-green-100 rounded-lg sm:rounded-xl p-3 sm:p-4 flex items-center animate-fade-in">
           <div className="flex-shrink-0">
-            <svg className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <p className="ml-3 text-sm font-medium text-green-800">
+          <p className="ml-2 sm:ml-3 text-xs sm:text-sm font-medium text-green-800">
             {successMessage}
           </p>
         </div>
@@ -115,34 +115,34 @@ export default function ChallengeList() {
       />
 
       {featuredChallenge && (
-        <div className="bg-white rounded-2xl shadow-soft p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Featured Challenge</h2>
-          <p className="text-gray-600 mb-4">Complete this challenge to earn bonus points!</p>
-          <div className="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl p-4">
+        <div className="bg-white rounded-lg sm:rounded-2xl shadow-sm p-4 sm:p-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Featured Challenge</h2>
+          <p className="text-sm sm:text-base text-gray-600 mb-4">Complete this challenge to earn bonus points!</p>
+          <div className="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
             <ChallengeCard challenge={featuredChallenge} />
           </div>  
         </div>
       )}
 
-      <div className="bg-white rounded-2xl shadow-soft p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold text-gray-900">Available Challenges</h2>
-            <p className="text-gray-600 mt-1">Choose from our curated list of challenges</p>
+      <div className="bg-white rounded-lg sm:rounded-2xl shadow-sm p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 mb-6">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Available Challenges</h2>
+            <p className="text-sm sm:text-base text-gray-600 mt-1">Choose from our curated list of challenges</p>
           </div>
-          <div className="flex items-start space-x-6">
-            <div className="max-w-xs text-right">
-              <p className="text-sm text-gray-600 mb-2">
+          <div className="flex items-start">
+            <div className="w-full sm:max-w-xs sm:text-right">
+              <p className="text-xs sm:text-sm text-gray-600 mb-2">
                 Can't find a suitable challenge? Share what meaningful you've done today!
               </p>
               <button
                 onClick={() => navigate('/submissions/custom')}
-                className="inline-flex items-center px-5 py-2.5 rounded-xl
+                className="w-full sm:w-auto inline-flex items-center justify-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl
                   text-sm font-medium transition-all duration-200 ease-out
                   bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600
                   text-white shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-[0.98]"
               >
-                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 4v16m8-8H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 Submit Custom Challenge
@@ -152,29 +152,29 @@ export default function ChallengeList() {
         </div>
         
         {availableChallenges.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {availableChallenges.map((challenge) => (
               <ChallengeCard key={challenge.id} challenge={challenge} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-lg text-gray-600">No challenges found for selected interests.</p>
-            <p className="text-sm text-gray-500 mt-2">Try selecting different interests or check back later!</p>
+          <div className="text-center py-8 sm:py-12">
+            <p className="text-base sm:text-lg text-gray-600">No challenges found for selected interests.</p>
+            <p className="text-xs sm:text-sm text-gray-500 mt-2">Try selecting different interests or check back later!</p>
           </div>
         )}
       </div>
 
       {pendingChallenge && (
-        <div className="bg-white rounded-2xl shadow-soft p-6 border-l-4 border-blue-400">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl font-bold text-gray-900">Challenge Under Review</h2>
-            <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+        <div className="bg-white rounded-lg sm:rounded-2xl shadow-sm p-4 sm:p-6 border-l-4 border-blue-400">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 mb-3 sm:mb-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Challenge Under Review</h2>
+            <span className="self-start sm:self-auto px-2.5 sm:px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs sm:text-sm font-medium">
               Under Review
             </span>
           </div>
-          <p className="text-gray-600 mb-4">Your submission is being reviewed by our team. We'll update you once it's approved!</p>
-          <div className="bg-blue-50 rounded-xl p-4">
+          <p className="text-sm sm:text-base text-gray-600 mb-4">Your submission is being reviewed by our team. We'll update you once it's approved!</p>
+          <div className="bg-blue-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
             <ChallengeCard challenge={pendingChallenge} />
           </div>
         </div>

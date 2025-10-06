@@ -35,21 +35,21 @@ export default function ChallengeCard({ challenge }) {
   };
 
   return (
-    <div className="group relative bg-white rounded-2xl transition-all duration-300
+    <div className="group relative bg-white rounded-lg sm:rounded-2xl transition-all duration-300
       hover:shadow-[0_0_20px_rgba(0,0,0,0.05)] hover:-translate-y-1">
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Category Tag */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3 sm:mb-4">
+          <div className="flex items-center">
             <span className={`
-              px-3 py-1 rounded-full text-sm font-medium
+              px-2.5 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium
               ${categoryStyles[category?.id]?.base || categoryStyles[7].base}
             `}>
               {category?.name || 'General'}
             </span>
           </div>
           <span className={`
-            inline-flex items-center px-3 py-1 text-sm font-medium rounded-full
+            inline-flex items-center px-2.5 sm:px-3 py-1 text-xs sm:text-sm font-medium rounded-full
             ring-1 ring-inset ${level.color}
           `}>
             {level.name}
@@ -57,42 +57,42 @@ export default function ChallengeCard({ challenge }) {
         </div>
 
         {/* Title & Description */}
-        <div className="mb-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-2 leading-tight">
+        <div className="mb-4 sm:mb-6">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1.5 sm:mb-2 leading-tight">
             {challenge.title}
           </h3>
-          <p className="text-gray-600 line-clamp-2 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 line-clamp-2 leading-relaxed">
             {challenge.description}
           </p>
         </div>
 
         {/* Challenge Stats */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="flex items-center space-x-4">
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-3 sm:pt-4 border-t border-gray-100">
+          <div className="flex items-center space-x-3 sm:space-x-4">
             {/* Time */}
             <div className="flex items-center text-gray-500">
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 6V12L16 14M12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" 
                   stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <span className="font-medium">{formatTime(challenge.time)}</span>
+              <span className="text-sm sm:text-base font-medium">{formatTime(challenge.time)}</span>
             </div>
 
             {/* Points */}
             <div className="flex items-center text-amber-600">
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 3L14.0357 8.16153L19.5 8.5L15.5 12.1667L16.5 17.5L12 14.6667L7.5 17.5L8.5 12.1667L4.5 8.5L9.96429 8.16153L12 3Z" 
                   fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <span className="font-bold">{challenge.points}</span>
+              <span className="text-sm sm:text-base font-bold">{challenge.points}</span>
             </div>
           </div>
 
           {/* Action Button */}
           <button
             onClick={handleClick}
-            className="relative inline-flex items-center justify-center text-sm font-semibold
-              text-white px-6 py-2 rounded-lg overflow-hidden
+            className="relative inline-flex items-center justify-center text-xs sm:text-sm font-semibold
+              text-white px-4 sm:px-6 py-2 rounded-lg overflow-hidden
               transition-all duration-300 ease-out
               bg-gradient-to-r from-indigo-500 to-purple-500
               hover:from-indigo-600 hover:to-purple-600
@@ -100,7 +100,7 @@ export default function ChallengeCard({ challenge }) {
               transform hover:scale-[1.02] active:scale-[0.98]"
           >
             View Details
-            <svg className="w-4 h-4 ml-2 -mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1.5 sm:ml-2 -mr-0.5 sm:-mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </button>

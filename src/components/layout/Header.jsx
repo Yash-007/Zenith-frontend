@@ -44,15 +44,15 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-white/70 border-b border-gray-100">
-      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
-        <div className="flex h-16 items-center justify-between">
+      <nav className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-8" aria-label="Top">
+        <div className="flex h-14 sm:h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500">
-                <span className="text-xl text-white font-bold">Z</span>
+            <Link to="/" className="flex items-center space-x-1.5 sm:space-x-2">
+              <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500">
+                <span className="text-lg sm:text-xl text-white font-bold">Z</span>
               </div>
-              <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
+              <span className="text-lg sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
                 Zenith
               </span>
             </Link>
@@ -89,15 +89,14 @@ export default function Header() {
                 </button>
 
                 {/* Profile Dropdown */}
-                {profileMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1">
+                <div className={`absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 transform origin-top-right transition-all duration-200 ${profileMenuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>
                     <button
                       onClick={() => {
                         navigate('/profile');
                         setProfileMenuOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 
-                        hover:text-gray-900 transition-colors duration-200"
+                    className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 
+                      hover:text-gray-900 transition-colors duration-200 first:rounded-t-lg"
                     >
                       View Profile
                     </button>
@@ -106,13 +105,12 @@ export default function Header() {
                         handleLogout();
                         setProfileMenuOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 
-                        hover:text-gray-900 transition-colors duration-200"
+                    className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 
+                      hover:text-gray-900 transition-colors duration-200 last:rounded-b-lg"
                     >
                       Sign Out
                     </button>
                   </div>
-                )}
               </div>
             ) : (
               <div className="flex items-center space-x-3">
@@ -134,14 +132,22 @@ export default function Header() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-500 hover:text-gray-600 -m-2.5 p-2.5"
+              className="relative -mr-1 p-2 rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-50 
+                focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 transition-all duration-200"
             >
               <span className="sr-only">Toggle menu</span>
-              {mobileMenuOpen ? (
-                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-              )}
+              <div className="relative w-6 h-6">
+                <Bars3Icon
+                  className={`absolute inset-0 w-6 h-6 transition-all duration-200 ease-in-out transform
+                    ${mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'}`}
+                  aria-hidden="true"
+                />
+                <XMarkIcon
+                  className={`absolute inset-0 w-6 h-6 transition-all duration-200 ease-in-out transform
+                    ${mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'}`}
+                  aria-hidden="true"
+                />
+              </div>
             </button>
           </div>
         </div>
@@ -156,13 +162,15 @@ export default function Header() {
                   to={item.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) => `
-                    text-base font-medium transition-colors duration-200
-                    ${isActive ? 'text-purple-600' : 'text-gray-900 hover:text-purple-600'}
+                    block px-3 py-2.5 rounded-lg text-base font-medium transition-colors duration-200
+                    ${isActive ? 'text-purple-600 bg-purple-50' : 'text-gray-900 hover:bg-gray-50 hover:text-purple-600'}
                   `}
                 >
                   {item.name}
                 </NavLink>
               ))}
+            </div>
+            <div className="pt-4 space-y-2">
               {isAuthenticated ? (
                 <>
                   <button
@@ -170,7 +178,8 @@ export default function Header() {
                       navigate('/profile');
                       setMobileMenuOpen(false);
                     }}
-                    className="flex items-center space-x-2 text-base font-medium text-gray-900 hover:text-purple-600
+                    className="w-full flex items-center space-x-2 px-3 py-2.5 rounded-lg
+                      text-base font-medium text-gray-900 hover:bg-gray-50 hover:text-purple-600
                       transition-colors duration-200"
                   >
                     <UserCircleIcon className="w-5 h-5" />
@@ -181,10 +190,9 @@ export default function Header() {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="mt-2 w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl
+                    className="w-full flex items-center justify-center px-3 py-2.5 rounded-lg
                       text-base font-medium transition-all duration-200 ease-out
-                      bg-white text-gray-700 hover:text-gray-900 border border-gray-200
-                      hover:bg-gray-50"
+                      bg-gray-50 text-gray-900 hover:bg-gray-100"
                   >
                     Sign Out
                   </button>
@@ -194,7 +202,8 @@ export default function Header() {
                   <Link
                     to="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-base font-medium text-gray-900 hover:text-purple-600
+                    className="block px-3 py-2.5 rounded-lg text-base font-medium
+                      text-gray-900 hover:bg-gray-50 hover:text-purple-600
                       transition-colors duration-200"
                   >
                     Sign In
@@ -202,10 +211,10 @@ export default function Header() {
                   <Link
                     to="/register"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="mt-2 w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl
-                      text-base font-medium transition-all duration-200 ease-out
-                      bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600
-                      text-white shadow-sm hover:shadow"
+                    className="block px-3 py-2.5 rounded-lg text-base font-medium
+                      text-white bg-gradient-to-r from-indigo-500 to-purple-500 
+                      hover:from-indigo-600 hover:to-purple-600 transition-all duration-200
+                      shadow-sm hover:shadow text-center"
                   >
                     Get Started
                   </Link>
@@ -213,7 +222,8 @@ export default function Header() {
               )}
             </div>
           </div>
-        )}
+          </div>
+        </div>
       </nav>
     </header>
   );

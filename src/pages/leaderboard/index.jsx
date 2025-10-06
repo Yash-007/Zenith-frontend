@@ -119,24 +119,40 @@ export default function LeaderboardPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Leaderboard</h1>
-        <p className="text-gray-600">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Leaderboard</h1>
+        <p className="text-sm sm:text-base text-gray-600">
           See how you stack up against other users in the community.
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+      <div className="space-y-4 sm:space-y-6">
+        {/* Find Me Button */}
+        <div className="flex justify-end">
+          <button
+            onClick={handleFindMe}
+            className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 
+              hover:from-indigo-600 hover:to-purple-600 text-white text-sm sm:text-base font-medium transition-all duration-200 
+              shadow-sm hover:shadow transform hover:scale-[1.02] active:scale-[0.98]
+              flex items-center justify-center space-x-2"
+          >
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clipRule="evenodd" />
+            </svg>
+            <span>Find My Rank</span>
+          </button>
+        </div>
+
         {/* Filters */}
-        <div className="flex-grow">
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">Filters</h2>
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Filters</h2>
+          <div className="bg-white rounded-lg sm:rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {/* City Filter */}
               <div>
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="city" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   City
                 </label>
                 <input
@@ -146,20 +162,20 @@ export default function LeaderboardPage() {
                   value={cityInput}
                   onChange={handleCityChange}
                   placeholder="Filter by city"
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-3 sm:px-4 py-2 rounded-lg text-sm border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
 
               {/* Age Range Filter */}
               <div>
-                <label htmlFor="ageRange" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="ageRange" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   Age Range
                 </label>
                 <select
                   id="ageRange"
                   value={selectedAgeRange}
                   onChange={handleAgeRangeChange}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-3 sm:px-4 py-2 rounded-lg text-sm border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 >
                   {ageRanges.map((range) => (
                     <option key={range.value} value={range.value}>
@@ -171,26 +187,10 @@ export default function LeaderboardPage() {
             </div>
           </div>
         </div>
-
-        {/* Find Me Button */}
-        <div className="mt-4 md:mt-0 md:ml-6 md:flex-shrink-0">
-          <button
-            onClick={handleFindMe}
-            className="w-full md:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 
-              hover:from-indigo-600 hover:to-purple-600 text-white font-medium transition-all duration-200 
-              shadow-sm hover:shadow transform hover:scale-[1.02] active:scale-[0.98]
-              flex items-center justify-center space-x-2"
-          >
-            <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clipRule="evenodd" />
-            </svg>
-            <span>Find My Rank</span>
-          </button>
-        </div>
       </div>
 
       {/* Leaderboard List */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="mt-4 sm:mt-6 bg-white rounded-lg sm:rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="divide-y divide-gray-100">
           {users.map((user, index) => {
             const position = (currentPage - 1) * limitPerPage + index + 1;
@@ -199,13 +199,13 @@ export default function LeaderboardPage() {
             return (
               <div 
                 key={user.id}
-                className={`p-4 flex items-center space-x-4 ${
+                className={`p-3 sm:p-4 flex items-center gap-3 sm:gap-4 ${
                   isCurrentUser ? 'bg-purple-50' : 'hover:bg-gray-50'
                 }`}
               >
                 {/* Position */}
-                <div className="flex-shrink-0 w-12 text-center">
-                  <span className={`text-lg font-bold ${
+                <div className="flex-shrink-0 w-8 sm:w-12 text-center">
+                  <span className={`text-base sm:text-lg font-bold ${
                     position === 1 ? 'text-yellow-500' : // Gold
                     position === 2 ? 'text-slate-400' : // Silver
                     position === 3 ? 'text-amber-600' : // Bronze
@@ -217,8 +217,8 @@ export default function LeaderboardPage() {
 
                 {/* User Info */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-2">
-                    <div className="relative h-10 w-10 rounded-full bg-gradient-to-br from-purple-100 to-indigo-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                  <div className="flex items-center gap-2">
+                    <div className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-gradient-to-br from-purple-100 to-indigo-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
                       {user.avatar && (
                         <img 
                           src={user.avatar} 
@@ -229,22 +229,22 @@ export default function LeaderboardPage() {
                           }}
                         />
                       )}
-                      <span className="text-lg font-medium" style={{
+                      <span className="text-base sm:text-lg font-medium" style={{
                         color: `hsl(${Math.abs(user.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)) % 360}, 70%, 45%)`
                       }}>
                         {user.name.charAt(0).toUpperCase()}
                       </span>
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate flex items-center">
                         {user.name}
                         {isCurrentUser && (
-                          <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                          <span className="ml-1.5 sm:ml-2 inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
                             You
                           </span>
                         )}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-xs sm:text-sm text-gray-500 truncate">
                         {[
                           user.city,
                           user.age && `${user.age} years`,
@@ -259,12 +259,12 @@ export default function LeaderboardPage() {
                 <div className="flex-shrink-0 text-right">
                   <div className="flex flex-col items-end">
                     <div className="flex items-center space-x-1">
-                      <span className="text-lg font-bold text-purple-600">
+                      <span className="text-base sm:text-lg font-bold text-purple-600">
                         {user.currentPoints}
                       </span>
-                      <span className="text-sm text-gray-500">pts</span>
+                      <span className="text-xs sm:text-sm text-gray-500">pts</span>
                     </div>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 hidden sm:block">
                       {user.challengesCompleted} challenges completed
                     </p>
                   </div>
@@ -275,25 +275,31 @@ export default function LeaderboardPage() {
         </div>
 
         {/* Pagination */}
-        <div className="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
+        <div className="px-3 sm:px-4 py-3 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage <= 1}
-            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900
-              disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900
+              disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
+            <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+            </svg>
             Previous
           </button>
-          <span className="text-sm text-gray-600">
+          <span className="text-xs sm:text-sm text-gray-600 order-first sm:order-none">
             Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage >= totalPages}
-            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900
-              disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900
+              disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
             Next
+            <svg className="w-4 h-4 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+            </svg>
           </button>
         </div>
       </div>

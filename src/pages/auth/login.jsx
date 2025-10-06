@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, selectAuthLoading, selectAuthError, clearError } from '../../store/slices/authSlice';
+import { loginUser, selectAuthLoading, selectAuthError, clearError, fetchCurrentUser } from '../../store/slices/authSlice';
 
 export default function LoginPage() {
   const dispatch = useDispatch();
