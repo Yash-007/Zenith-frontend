@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectIsAuthenticated, fetchCurrentUser } from './store/slices/authSlice'
+import { fetchCategories } from './store/slices/categorySlice'
 import Layout from './components/layout/Layout'
 import HomePage from './pages/home'
 import ChallengesPage from './pages/challenges'
@@ -28,6 +29,9 @@ function App() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   useEffect(() => {
+    // Always fetch categories as they're needed throughout the app
+    dispatch(fetchCategories());
+
     // Fetch user data on app load if authenticated
     if (isAuthenticated) {
       dispatch(fetchCurrentUser());
