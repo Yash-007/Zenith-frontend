@@ -16,7 +16,8 @@ export default function SubmissionHeatmap() {
             const response = await submissionApi.getUserSubmissions(0);            
             if (response.success) {
               const submissionCounts = response.data.submissions.reduce((acc, submission) => {
-                const date = new Date(submission.submittedAt).toISOString().split('T')[0];
+                let date = new Date(submission.submittedAt).toLocaleDateString('en-IN').split('/');
+                date=`${date[2]}-${date[1]}-${date[0]}`;
                 acc[date] = (acc[date] || 0) + 1;
                 return acc;
               }, {});
