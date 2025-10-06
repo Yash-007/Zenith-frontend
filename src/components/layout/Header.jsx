@@ -90,27 +90,27 @@ export default function Header() {
 
                 {/* Profile Dropdown */}
                 <div className={`absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 transform origin-top-right transition-all duration-200 ${profileMenuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>
-                    <button
-                      onClick={() => {
-                        navigate('/profile');
-                        setProfileMenuOpen(false);
-                      }}
+                  <button
+                    onClick={() => {
+                      navigate('/profile');
+                      setProfileMenuOpen(false);
+                    }}
                     className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 
                       hover:text-gray-900 transition-colors duration-200 first:rounded-t-lg"
-                    >
-                      View Profile
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setProfileMenuOpen(false);
-                      }}
+                  >
+                    View Profile
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setProfileMenuOpen(false);
+                    }}
                     className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 
                       hover:text-gray-900 transition-colors duration-200 last:rounded-b-lg"
-                    >
-                      Sign Out
-                    </button>
-                  </div>
+                  >
+                    Sign Out
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="flex items-center space-x-3">
@@ -153,9 +153,12 @@ export default function Header() {
         </div>
 
         {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-4">
-            <div className="flex flex-col space-y-4 pb-4">
+        <div className={`md:hidden ${mobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+          <div className={`fixed inset-x-0 top-[3.5rem] sm:top-16 transform ${
+            mobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+          } transition-all duration-200 ease-in-out bg-white border-b border-gray-100 shadow-lg`}>
+          <div className="px-4 py-3 divide-y divide-gray-100">
+            <div className="space-y-1 pb-3">
               {navigation.map((item) => (
                 <NavLink
                   key={item.name}
