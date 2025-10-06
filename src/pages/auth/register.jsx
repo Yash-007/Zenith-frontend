@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { registerUser, selectAuthLoading, selectAuthError, clearError } from '../../store/slices/authSlice';
-import { fetchCategories, selectAllCategories } from '../../store/slices/categorySlice';
+import { selectAllCategories } from '../../store/slices/categorySlice';
 
 export default function RegisterPage() {
   const dispatch = useDispatch();
@@ -23,7 +23,6 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchCategories());
     return () => {
       dispatch(clearError());
     };

@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { selectAllCategories } from '../../../store/slices/categorySlice';
 
 const levelConfig = {
-  1: {
+  0: {
     name: 'Beginner',
     color: 'text-emerald-600 bg-emerald-50 ring-emerald-500/10',
   },
-  2: {
+  1: {
     name: 'Intermediate',
     color: 'text-amber-600 bg-amber-50 ring-amber-500/10',
   },
-  3: {
+  2: {
     name: 'Advanced',
     color: 'text-rose-600 bg-rose-50 ring-rose-500/10',
   }

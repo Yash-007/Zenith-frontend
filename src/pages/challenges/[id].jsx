@@ -7,15 +7,37 @@ import { selectAllCategories } from '../../store/slices/categorySlice';
 import { selectCurrentUser, fetchCurrentUser } from '../../store/slices/authSlice';
 import { challengeApi } from '../../services/api';
 
-// Temporary dummy data for longDescription
-const DUMMY_LONG_DESCRIPTION = `This challenge focuses on implementing the classic knapsack problem using dynamic programming. You'll need to create an efficient solution that can handle multiple test cases with varying weights and values. The goal is to maximize the total value while staying within the weight constraint. This is a fundamental problem in computer science and is particularly useful in resource allocation scenarios.
-
-Your implementation should demonstrate a clear understanding of dynamic programming concepts and include proper time and space complexity analysis. Consider edge cases such as when all items are too heavy or when the knapsack capacity is zero.`;
-
 const levelMap = {
-  0: { name: 'Beginner', icon: '🌱', color: 'bg-green-100 text-green-800', description: 'Perfect for those just starting out' },
-  1: { name: 'Intermediate', icon: '⭐', color: 'bg-yellow-100 text-yellow-800', description: 'For those with some experience' },
-  2: { name: 'Advanced', icon: '🔥', color: 'bg-red-100 text-red-800', description: 'Challenging tasks for experienced users' }
+  0: { 
+    name: 'Beginner', 
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+    ), 
+    color: 'bg-green-100 text-green-800', 
+    description: 'Perfect for those just starting out' 
+  },
+  1: { 
+    name: 'Intermediate', 
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+    ), 
+    color: 'bg-yellow-100 text-yellow-800', 
+    description: 'For those with some experience' 
+  },
+  2: { 
+    name: 'Advanced', 
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
+      </svg>
+    ), 
+    color: 'bg-red-100 text-red-800', 
+    description: 'Challenging tasks for experienced users' 
+  }
 };
 
 const submissionTypeMap = {
@@ -136,6 +158,8 @@ export default function ChallengeDetail() {
     );
   }
 
+  console.log('challenge', challenge);
+  console.log('categories', categories);
   const category = categories.find(cat => cat.id === challenge.category);
   const levelInfo = levelMap[challenge.level] || levelMap[1];
 //   const submissionInfo = submissionTypeMap[challenge.submissionType] || submissionTypeMap['TEXT'];
@@ -170,7 +194,6 @@ export default function ChallengeDetail() {
         <div className="flex flex-wrap gap-4 mt-6">
           {/* Category */}
           <div className="flex items-center px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-800">
-            <span className="text-lg mr-2">📚</span>
             <span className="font-medium">{category?.name || 'General'}</span>
           </div>
 
