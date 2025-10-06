@@ -10,6 +10,7 @@ export default function CustomSubmissionPage() {
   const dispatch = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [challengeName, setChallengeName] = useState('');
   const [description, setDescription] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
   const [previewUrls, setPreviewUrls] = useState([]);
@@ -58,6 +59,7 @@ export default function CustomSubmissionPage() {
       const submitData = new FormData();
       submitData.append('userId', currentUser.id);
       submitData.append('challengeId', customChallengeId);
+      submitData.append('challengeName', challengeName.trim() || 'Custom Challenge');
       submitData.append('text', description);
       submitData.append('status', 'PENDING');
       submitData.append('isChallengeExists', false);
@@ -105,7 +107,7 @@ export default function CustomSubmissionPage() {
         </p>
         <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full bg-primary-50 border border-primary-100">
           <svg className="w-5 h-5 text-primary-500 mr-1.5" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM13 16h-2v2h2v-2zm0-6h-2v4h2v-4z" />
+            <path d="M12.0006 1.25C12.2871 1.25 12.5513 1.41834 12.6712 1.67683L15.6118 7.60941L22.1671 8.53029C22.4507 8.57569 22.6865 8.77027 22.7919 9.03571C22.8973 9.30116 22.8571 9.60189 22.6857 9.83004L18.1742 15.1106L19.3081 21.7089C19.3644 21.9938 19.2721 22.2854 19.0607 22.4813C18.8493 22.6771 18.5526 22.7506 18.2756 22.6771L12.0006 19.8518L5.72568 22.6771C5.44865 22.7506 5.152 22.6771 4.94057 22.4813C4.72915 22.2854 4.63687 21.9938 4.69321 21.7089L5.82711 15.1106L1.31559 9.83004C1.14425 9.60189 1.104 9.30116 1.20939 9.03571C1.31478 8.77027 1.55054 8.57569 1.83414 8.53029L8.38947 7.60941L11.33 1.67683C11.45 1.41834 11.7142 1.25 12.0006 1.25Z" />
           </svg>
           <span className="text-sm font-medium text-primary-700">Earn 100 points upon approval</span>
         </div>
@@ -114,6 +116,21 @@ export default function CustomSubmissionPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <div className="space-y-6">
+            {/* Challenge Name */}
+            <div>
+              <label htmlFor="challengeName" className="block text-sm font-medium text-gray-700 mb-1">
+                Challenge Name (optional)
+              </label>
+              <input
+                id="challengeName"
+                type="text"
+                value={challengeName}
+                onChange={(e) => setChallengeName(e.target.value)}
+                placeholder="Name your challenge"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              />
+            </div>
+
             {/* Description */}
             <div>
               <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
