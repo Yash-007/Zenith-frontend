@@ -19,16 +19,16 @@ export default function ChallengesPage() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center rounded-full bg-white/10 px-2.5 sm:px-3 py-1 text-xs sm:text-sm backdrop-blur-lg mb-4">
               <span className="flex h-1.5 sm:h-2 w-1.5 sm:w-2 rounded-full bg-emerald-400 mr-1.5 sm:mr-2"></span>
-              <span className="font-medium text-white/90">24 Active Challenges</span>
+              <span className="font-medium text-white/90">50+ Active Challenges</span>
             </div>
             
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 sm:mb-4 tracking-tight">
               Daily Challenges
             </h1>
-            <p className="text-base sm:text-lg text-white/90 leading-relaxed">
-              Push your boundaries and achieve personal growth through our curated challenges. 
-              Each completion brings you closer to becoming your best self.
-            </p>
+              <p className="text-base sm:text-lg text-white/90 leading-relaxed">
+                Push your boundaries through our curated challenges or share your own achievements. 
+                Each step brings you closer to becoming your best self.
+              </p>
           </div>
 
           {/* Decorative Icon */}
@@ -54,7 +54,7 @@ export default function ChallengesPage() {
             </div>
             <div>
               <div className="text-xs sm:text-sm font-medium text-gray-500">Available</div>
-              <div className="text-lg sm:text-2xl font-bold text-gray-900">24</div>
+              <div className="text-lg sm:text-2xl font-bold text-gray-900">60</div>
             </div>
           </div>
         </div>

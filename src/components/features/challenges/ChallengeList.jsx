@@ -117,7 +117,7 @@ export default function ChallengeList() {
       {featuredChallenge && (
         <div className="bg-white rounded-lg sm:rounded-2xl shadow-sm p-4 sm:p-6">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Featured Challenge</h2>
-          <p className="text-sm sm:text-base text-gray-600 mb-4">Complete this challenge to earn bonus points!</p>
+          <p className="text-sm sm:text-base text-gray-600 mb-4">Complete the challenge to earn points!</p>
           <div className="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
             <ChallengeCard challenge={featuredChallenge} />
           </div>  

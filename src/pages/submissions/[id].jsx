@@ -151,7 +151,7 @@ export default function SubmissionDetail() {
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-3">
                 <h1 className="text-2xl font-bold text-gray-900">
-                  Custom Submission
+                  {submission.challengeName || 'Custom Submission'}
                 </h1>
               </div>
               <div className={`px-4 py-1.5 rounded-full text-sm font-medium ${statusInfo.color}`}>
@@ -187,7 +187,7 @@ export default function SubmissionDetail() {
               {submission.proofs.images.map((image, index) => (
                 <div key={index} className="aspect-square rounded-lg overflow-hidden">
                   <img 
-                    src={image} 
+                    src={`http://localhost:3000/${image}`} 
                     alt={`Submission ${index + 1}`} 
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -201,23 +201,53 @@ export default function SubmissionDetail() {
           </div>
         )}
 
-        {/* Rejection Message */}
-        {status === 'REJECTED' && (
-          <div className="mt-8 p-4 bg-red-50 border border-red-100 rounded-lg">
-            <h3 className="text-lg font-semibold text-red-800 mb-2">Submission Rejected</h3>
-            <p className="text-red-700">
-              Your submission was not approved. You can submit the challenge again with the required changes.
+        {/* Reviewer Remarks */}
+        {submission.remarks && (
+          <div className={`mt-8 p-4 rounded-lg ${
+            status === 'REJECTED' 
+              ? 'bg-red-50 border border-red-100' 
+              : status === 'COMPLETED'
+              ? 'bg-green-50 border border-green-100'
+              : 'bg-yellow-50 border border-yellow-100'
+          }`}>
+            <h3 className={`text-lg font-semibold mb-2 ${
+              status === 'REJECTED'
+                ? 'text-red-800'
+                : status === 'COMPLETED'
+                ? 'text-green-800'
+                : 'text-yellow-800'
+            }`}>
+              Reviewer's Remarks
+            </h3>
+            <p className={`whitespace-pre-wrap ${
+              status === 'REJECTED'
+                ? 'text-red-700'
+                : status === 'COMPLETED'
+                ? 'text-green-700'
+                : 'text-yellow-700'
+            }`}>
+              {submission.remarks}
             </p>
-            {isChallengeExists && (
-              <button
-                onClick={() => navigate(`/challenges/${challengeDetails.id}`)}
-                className="mt-4 inline-flex items-center px-4 py-2 rounded-lg
-                  text-sm font-medium transition-all duration-200 ease-out
-                  bg-red-100 text-red-700 hover:bg-red-200"
-              >
-                Try Again
-              </button>
-            )}
+          </div>
+        )}
+        
+        {/* Default Status Messages when no remarks */}
+        {!submission.remarks && (status === 'REJECTED' || status === 'COMPLETED') && (
+          <div className={`mt-8 p-4 rounded-lg ${
+            status === 'REJECTED' 
+              ? 'bg-red-50 border border-red-100'
+              : 'bg-green-50 border border-green-100'
+          }`}>
+            <h3 className={`text-lg font-semibold mb-2 ${
+              status === 'REJECTED' ? 'text-red-800' : 'text-green-800'
+            }`}>
+              {status === 'REJECTED' ? 'Submission Rejected' : 'Submission Approved'}
+            </h3>
+            <p className={status === 'REJECTED' ? 'text-red-700' : 'text-green-700'}>
+              {status === 'REJECTED' 
+                ? 'Your submission was not approved.'
+                : 'Your submission has been approved.'}
+            </p>
           </div>
         )}
       </div>

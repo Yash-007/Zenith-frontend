@@ -346,6 +346,7 @@ export default function ChallengeDetail() {
             const submitData = new FormData();
             submitData.append('userId', currentUser.id);
             submitData.append('challengeId', id);
+            submitData.append('challengeName', challenge.title);
             submitData.append('status', 'PENDING');
             submitData.append('isChallengeExists', 'true');
             

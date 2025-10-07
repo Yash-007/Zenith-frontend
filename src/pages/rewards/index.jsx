@@ -145,7 +145,7 @@ export default function RewardsPage() {
                 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
                 shadow-md hover:shadow-lg"
             >
-              Redeem Points
+              Redeem via UPI
             </button>
             {currentUser?.currentPoints < 3000 && (
               <p className="text-xs sm:text-sm text-purple-200 mt-2 text-center sm:text-left">

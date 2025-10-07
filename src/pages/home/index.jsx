@@ -70,7 +70,7 @@ export default function HomePage() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Choose Your Path</h3>
               <p className="text-gray-600">
-                Select from various categories that match your interests and goals
+                Select from curated challenges or share your own achievements
               </p>
             </div>
 
