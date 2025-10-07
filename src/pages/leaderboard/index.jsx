@@ -246,9 +246,13 @@ export default function LeaderboardPage() {
                       </p>
                       <p className="text-xs sm:text-sm text-gray-500 truncate">
                         {[
-                          user.city,
+                          user.city?.toLowerCase().split(' ').map(word => 
+                            word.charAt(0).toUpperCase() + word.slice(1)
+                          ).join(' '),
                           user.age && `${user.age} years`,
-                          `Level ${user.level}`
+                          `Level ${user.level?.toLowerCase().split(' ').map(word => 
+                            word.charAt(0).toUpperCase() + word.slice(1)
+                          ).join(' ')}`
                         ].filter(Boolean).join(' • ')}
                       </p>
                     </div>
