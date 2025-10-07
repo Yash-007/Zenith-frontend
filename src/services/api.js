@@ -1,9 +1,15 @@
 import axios from 'axios';
 
+const cacheControlHeaders = {
+  'Cache-Control': 'no-cache',
+  'Pragma': 'no-cache'
+};
+
 const api = axios.create({
   baseURL: 'http://localhost:3000/api/v1',
   headers: {
     'Content-Type': 'application/json',
+    ...cacheControlHeaders
   },
 });
 
@@ -76,10 +82,6 @@ export const userApi = {
     };
     return api.get('/user/leaderboard', { 
       params,
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-      }
     });
   },
 };
