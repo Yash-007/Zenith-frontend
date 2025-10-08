@@ -7,7 +7,6 @@ export const fetchUserChallenges = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await challengeApi.getUserChallenges();
-      console.log(response);
       if (response?.success) {
         return response.data;
       }

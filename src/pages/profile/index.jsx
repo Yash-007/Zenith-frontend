@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { selectCurrentUser } from '../../store/slices/authSlice';
+import { selectCurrentUser, selectIsAuthenticated } from '../../store/slices/authSlice';
 import { submissionApi } from '../../services/api';
 import SubmissionHeatmap from '../../components/features/profile/SubmissionHeatmap';
 
@@ -14,6 +14,7 @@ const statusMap = {
 export default function ProfilePage() {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const [recentSubmissions, setRecentSubmissions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -47,12 +48,29 @@ export default function ProfilePage() {
     fetchRecentSubmissions();
   }, [currentPage]);
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   if (!currentUser) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="text-center py-12">
-          <p className="text-xl font-semibold text-red-600 mb-2">Not Authenticated</p>
-          <p className="text-gray-600">Please log in to view your profile.</p>
+        <div className="animate-pulse space-y-8">
+          <div className="h-32 bg-gray-200 rounded-2xl"></div>
+          <div className="space-y-4">
+            <div className="h-8 bg-gray-200 w-1/3 rounded"></div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="h-24 bg-gray-200 rounded-xl"></div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );

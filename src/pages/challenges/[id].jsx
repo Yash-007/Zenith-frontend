@@ -99,7 +99,6 @@ export default function ChallengeDetail() {
           setChallenge(response.data);
         } else {
           const errorMessage = response?.response?.data?.message || 'Failed to load challenge';
-          console.log('Challenge Load Error:', { response });
           setLoadError(errorMessage);
         }
       } catch (err) {
@@ -158,8 +157,6 @@ export default function ChallengeDetail() {
     );
   }
 
-  console.log('challenge', challenge);
-  console.log('categories', categories);
   const category = categories.find(cat => cat.id === challenge.category);
   const levelInfo = levelMap[challenge.level] || levelMap[1];
 //   const submissionInfo = submissionTypeMap[challenge.submissionType] || submissionTypeMap['TEXT'];
@@ -273,10 +270,10 @@ export default function ChallengeDetail() {
       {/* Challenge Submission Section */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
         {challenge.isSubmitted ? (
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <h2 className="text-xl font-bold text-gray-900">Challenge Submitted</h2>
-              <div className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">Challenge Submitted</h2>
+              <div className={`self-start sm:self-auto px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium ${
                 challenge.submissionStatus === 'COMPLETED' ? 'bg-green-100 text-green-800' :
                 challenge.submissionStatus === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
                 'bg-red-100 text-red-800'
@@ -287,20 +284,18 @@ export default function ChallengeDetail() {
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate(`/submissions/${challenge.submissionId}`)}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg
-                  text-sm font-medium transition-all duration-200 ease-out
-                  bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600
-                  text-white shadow-sm hover:shadow transform hover:scale-[1.02] active:scale-[0.98]"
-              >
-                View Submission
-                <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </div>
+            <button
+              onClick={() => navigate(`/submissions/${challenge.submissionId}`)}
+              className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 rounded-lg
+                text-sm font-medium transition-all duration-200 ease-out
+                bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600
+                text-white shadow-sm hover:shadow transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              View Submission
+              <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
           </div>
         ) : (
           <>
