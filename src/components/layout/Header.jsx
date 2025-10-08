@@ -24,17 +24,26 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+  const mobileMenuButtonRef = useRef(null);
 
-  // Close profile menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
+      // Handle profile menu
       if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
         setProfileMenuOpen(false);
+      }
+
+      if (mobileMenuOpen && 
+          mobileMenuRef.current && 
+          !mobileMenuRef.current.contains(event.target) &&
+          !mobileMenuButtonRef.current.contains(event.target)) {
+        setMobileMenuOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [mobileMenuOpen]);
   
   const navigation = isAuthenticated ? privateNavigation : publicNavigation;
   
@@ -130,6 +139,7 @@ export default function Header() {
           {/* Mobile menu button */}
           <div className="flex md:hidden">
             <button
+              ref={mobileMenuButtonRef}
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="relative -mr-1 p-2 rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-50 
@@ -153,7 +163,10 @@ export default function Header() {
         </div>
 
         {/* Mobile menu */}
-        <div className={`md:hidden ${mobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+        <div 
+          ref={mobileMenuRef}
+          className={`md:hidden ${mobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
+        >
           <div className={`fixed inset-x-0 top-[3.5rem] sm:top-16 transform ${
             mobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
           } transition-all duration-200 ease-in-out bg-white border-b border-gray-100 shadow-lg`}>
