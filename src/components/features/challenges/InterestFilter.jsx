@@ -163,7 +163,7 @@ export default function InterestFilter({ onFilterChange, challengesByInterest })
           </button>
         )}
       </div>
-      <div className="flex flex-nowrap gap-2 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+      <div className="flex flex-nowrap gap-2 overflow-x-auto pb-4 -mx-4 px-4 no-scrollbar">
         {availableCategories.map((category) => {
           const isSelected = selectedInterests.has(category.id);
           const style = getCategoryStyle(category);
