@@ -187,7 +187,7 @@ export default function SubmissionDetail() {
               {submission.proofs.images.map((image, index) => (
                 <div key={index} className="aspect-square rounded-lg overflow-hidden">
                   <img 
-                    src={`http://localhost:3000/${image}`} 
+                    src={`https://zenith-backend-z8ig.onrender.com/${image}`} 
                     alt={`Submission ${index + 1}`} 
                     className="w-full h-full object-cover"
                     onError={(e) => {
