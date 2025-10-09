@@ -6,7 +6,7 @@ const cacheControlHeaders = {
 };
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: 'https://zenith-backend-z8ig.onrender.com/api/v1',
   headers: {
     'Content-Type': 'application/json',
     ...cacheControlHeaders
