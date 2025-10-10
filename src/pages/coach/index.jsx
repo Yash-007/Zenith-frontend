@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { chatApi } from '../../services/api';
+import toast from 'react-hot-toast';
 import ChatBot from '../../components/features/coach/ChatBot';
 import Blogs from '../../components/features/coach/Blogs';
 
@@ -9,6 +11,30 @@ const tabs = [
 
 export default function CoachPage() {
   const [activeTab, setActiveTab] = useState('chat');
+  const [chatHistory, setChatHistory] = useState([]);
+  const [isLoadingChat, setIsLoadingChat] = useState(true);
+
+  useEffect(() => {
+    const fetchChatHistory = async () => {
+      try {
+        const response = await chatApi.getChatHistory();
+        if (response.success && response.data.length > 0) {
+          const formattedMessages = response.data.map(chat => ([
+            { type: 'user', content: chat.query },
+            { type: 'bot', content: chat.response }
+          ])).flat();
+          setChatHistory(formattedMessages);
+        }
+      } catch (error) {
+        console.error('Failed to load chat history:', error);
+        toast.error('Failed to load chat history');
+      } finally {
+        setIsLoadingChat(false);
+      }
+    };
+
+    fetchChatHistory();
+  }, []);
 
   return (
     <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
@@ -92,7 +118,11 @@ export default function CoachPage() {
         {/* Tab Content */}
         <div className="p-3 sm:p-6">
           {activeTab === 'chat' ? (
-            <ChatBot />
+            <ChatBot 
+              initialHistory={chatHistory}
+              isLoading={isLoadingChat}
+              onHistoryUpdate={(newMessages) => setChatHistory(newMessages)}
+            />
           ) : (
             <Blogs />
           )}

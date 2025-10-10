@@ -4,47 +4,27 @@ import { selectCurrentUser } from '../../../store/slices/authSlice';
 import { chatApi } from '../../../services/api';
 import toast from 'react-hot-toast';
 
-export default function ChatBot() {
+export default function ChatBot({ initialHistory, isLoading, onHistoryUpdate }) {
   const currentUser = useSelector(selectCurrentUser);
-  const [messages, setMessages] = useState([
-    {
-      type: 'bot',
-      content: `Hi ${currentUser?.name || 'there'}! I'm your AI growth coach. I can help you with:
-      • Understanding platform features
-      • Tracking your progress
-      • Personal growth advice
-      
-      What would you like to know?`
-    }
-  ]);
+  const welcomeMessage = {
+    type: 'bot',
+    content: `Hi ${currentUser?.name || 'there'}! I'm your AI growth coach. I can help you with:
+    • Understanding platform features
+    • Tracking your progress
+    • Personal growth advice
+    
+    What would you like to know?`
+  };
+  
+  const [messages, setMessages] = useState([welcomeMessage, ...initialHistory]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef(null);
 
-  // Fetch chat history
+  // Update messages when history changes
   useEffect(() => {
-    const fetchChatHistory = async () => {
-      try {
-        const response = await chatApi.getChatHistory();
-        if (response.success && response.data.length > 0) {
-          const formattedMessages = response.data.map(chat => ([
-            { type: 'user', content: chat.query },
-            { type: 'bot', content: chat.response }
-          ])).flat();
-          
-          setMessages(prev => [prev[0], ...formattedMessages]); // Keep welcome message at top
-        }
-      } catch (error) {
-        console.error('Failed to load chat history:', error);
-        toast.error('Failed to load chat history');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchChatHistory();
-  }, []);
+    setMessages([welcomeMessage, ...initialHistory]);
+  }, [initialHistory]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -65,7 +45,8 @@ export default function ChatBot() {
     
     // Add user message
     const userMessage = { type: 'user', content: userQuery };
-    setMessages(prev => [...prev, userMessage]);
+    const newMessagesContainingQuery = [...messages, userMessage];
+    setMessages(newMessagesContainingQuery);
     setInput('');
     setIsTyping(true);
 
@@ -73,10 +54,12 @@ export default function ChatBot() {
       const response = await chatApi.sendQuery(userQuery);
       
       if (response.success) {
-        setMessages(prev => [...prev, {
+        const newMessages = [...newMessagesContainingQuery, {
           type: 'bot',
           content: response.data.response
-        }]);
+        }];
+        setMessages(newMessages);
+        onHistoryUpdate(newMessages.slice(1)); // Remove welcome message from history
       } else {
         throw new Error(response.message || 'Failed to get response');
       }
