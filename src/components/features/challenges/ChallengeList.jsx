@@ -130,24 +130,27 @@ export default function ChallengeList() {
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Available Challenges</h2>
             <p className="text-sm sm:text-base text-gray-600 mt-1">Choose from our curated list of challenges</p>
           </div>
-          <div className="flex items-start">
-            <div className="w-full sm:max-w-xs sm:text-right">
-              <p className="text-xs sm:text-sm text-gray-600 mb-2">
-                Can't find a suitable challenge? Share what meaningful you've done today!
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-4 border border-purple-100/50 hover:shadow-lg transition-all duration-200">
+            <div className="flex-1 text-center sm:text-left">
+              <p className="text-base sm:text-lg font-medium text-gray-900">
+                Can't find a suitable challenge?
               </p>
-              <button
-                onClick={() => navigate('/submissions/custom')}
-                className="w-full sm:w-auto inline-flex items-center justify-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl
-                  text-sm font-medium transition-all duration-200 ease-out
-                  bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600
-                  text-white shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 4v16m8-8H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                Submit Custom Challenge
-              </button>
+              <p className="text-sm text-gray-600 mt-1">
+                Share what meaningful you've done today!
+              </p>
             </div>
+            <button
+              onClick={() => navigate('/submissions/custom')}
+              className="flex-shrink-0 inline-flex items-center px-5 py-2.5 rounded-lg
+                text-sm font-medium transition-all duration-200 ease-out
+                bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600
+                text-white shadow-sm hover:shadow transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4v16m8-8H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Submit Custom Challenge
+            </button>
           </div>
         </div>
         
