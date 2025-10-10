@@ -117,22 +117,39 @@ export default function RewardsPage() {
     <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
       {/* Header */}
       <div className="text-center mb-8 sm:mb-12">
+        <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 text-green-800 font-medium mb-4">
+          <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.121 15.536c-1.171 1.952-3.07 1.952-4.242 0-1.172-1.953-1.172-5.119 0-7.072 1.171-1.952 3.07-1.952 4.242 0M8 10.5h4m-4 3h4m9-1.5a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Instant UPI Rewards for Your Achievements!
+        </div>
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-          Turn Your Achievements Into Rewards
+          Turn Your Growth Into Money
         </h1>
         <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-          Complete challenges, earn points, and redeem them for exciting rewards. 
-          The more you achieve, the more you earn!
+          Complete challenges, earn points, and get instant rewards via UPI. Your personal growth journey now comes with real benefits!
         </p>
       </div>
 
       {/* Current Points Card */}
-      <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8 mb-8 sm:mb-12 text-white">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
+      <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8 mb-8 sm:mb-12 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 transform translate-x-8 -translate-y-8">
+          <svg className="w-32 h-32 text-white/10" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12m11.32 11.32l2.12 2.12M1 12h3m16 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" />
+          </svg>
+        </div>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 relative">
           <div className="text-center sm:text-left">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-2">Your Current Points</h2>
+            <div className="flex items-center mb-2">
+              <h2 className="text-xl sm:text-2xl font-semibold">Your Current Points</h2>
+              <div className="ml-3 px-2 py-1 bg-white/20 rounded-full text-xs">
+                Ready to Redeem
+              </div>
+            </div>
             <div className="flex items-baseline justify-center sm:justify-start space-x-2">
-              <span className="text-4xl sm:text-5xl font-bold">{currentUser?.currentPoints || 0}</span>
+              <span className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200">
+                {currentUser?.currentPoints || 0}
+              </span>
               <span className="text-sm sm:text-base text-purple-200">points</span>
             </div>
           </div>
@@ -143,14 +160,22 @@ export default function RewardsPage() {
               className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-white text-purple-600 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium
                 transition-all duration-200 transform hover:scale-105 active:scale-100
                 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                shadow-md hover:shadow-lg"
+                shadow-md hover:shadow-lg flex items-center justify-center"
             >
+              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
               Redeem via UPI
             </button>
             {currentUser?.currentPoints < 3000 && (
-              <p className="text-xs sm:text-sm text-purple-200 mt-2 text-center sm:text-left">
-                Need {3000 - (currentUser?.currentPoints || 0)} more points to redeem
-              </p>
+              <div className="mt-2 text-center sm:text-left">
+                <p className="text-xs sm:text-sm text-purple-200">
+                  Keep going! Almost there
+                </p>
+                <p className="text-xs text-purple-200/80">
+                  Complete more challenges to unlock rewards
+                </p>
+              </div>
             )}
           </div>
         </div>
