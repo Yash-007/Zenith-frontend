@@ -17,6 +17,7 @@ import RewardsPage from './pages/rewards'
 import CoachPage from './pages/coach'
 import LoginPage from './pages/auth/login'
 import RegisterPage from './pages/auth/register'
+import NotFoundPage from './pages/404'
 
 // Protected Route wrapper
 function ProtectedRoute({ children }) {
@@ -134,6 +135,8 @@ function App() {
             </Layout>
           </ProtectedRoute>
         } />
+
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   )
