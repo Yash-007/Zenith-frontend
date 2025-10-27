@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../store/slices/authSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectCurrentUser, fetchCurrentUser } from '../../store/slices/authSlice';
 import { toast } from 'react-hot-toast';
 import { rewardApi } from '../../services/api';
 
@@ -65,10 +65,14 @@ const redemptionRules = [
 ];
 
 export default function RewardsPage() {
+  const dispatch = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
   const [rewardHistory, setRewardHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showUpiDialog, setShowUpiDialog] = useState(false);
+  const [upiId, setUpiId] = useState('');
+  const [isRedeeming, setIsRedeeming] = useState(false);
 
   useEffect(() => {
     const fetchRewardHistory = async () => {
@@ -93,23 +97,74 @@ export default function RewardsPage() {
     fetchRewardHistory();
   }, []);
 
-  const handleRedeem = async () => {
+  const handleRedeem = () => {
+    setShowUpiDialog(true);
+  };
+
+  // UPI ID validation regex
+  const isValidUpiId = (upiId) => {
+    // Basic UPI ID format validation
+    const upiRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+$/;
+    
+    // Common UPI handles
+    const commonHandles = ['okaxis', 'okhdfcbank', 'okicici', 'oksbi', 'ybl', 'upi', 'paytm', 'ibl', 'apl'];
+    
+    if (!upiRegex.test(upiId)) {
+      return false;
+    }
+
+    // Extract handle part after @
+    const [, handle] = upiId.split('@');
+    
+    // Check if the handle part matches common UPI handles
+    return commonHandles.some(commonHandle => handle.toLowerCase().includes(commonHandle));
+  };
+
+  const handleUpiSubmit = async (e) => {
+    e.preventDefault();
+    const trimmedUpiId = upiId.trim();
+    
+    if (!trimmedUpiId) {
+      toast.error('Please enter a UPI ID');
+      return;
+    }
+
+    if (!isValidUpiId(trimmedUpiId)) {
+      toast.error('Please enter a valid UPI ID (e.g., username@upi, username@ybl)');
+      return;
+    }
+
+    setIsRedeeming(true);
     try {
-      const response = await rewardApi.redeem(3000); // Fixed amount of 3000 points
+      const response = await rewardApi.redeem({
+        pointsRewarded: 3000,
+        amount: 20000,
+        vpaAddress: upiId.trim(),
+        rewardType: 'CASHBACK'
+      });
+
       if (response.success) {
+        // Refresh user data to update points
+        await dispatch(fetchCurrentUser());
+        
         // Refresh reward history
         const historyResponse = await rewardApi.getHistory();
         if (historyResponse.success) {
           setRewardHistory(historyResponse.data);
         }
+        
         // Show success message
-        toast.success('Points redeemed successfully! You will receive ₹200 within 24-48 hours.');
+        toast.success('Points redeemed successfully! Please check your reward history for the status.');
+        setShowUpiDialog(false);
+        setUpiId('');
       } else {
         throw new Error(response?.response?.data?.message || 'Failed to redeem points');
       }
     } catch (err) {
       console.error('Redemption Error:', err);
       toast.error(err.message || 'Failed to redeem points');
+    } finally {
+      setIsRedeeming(false);
     }
   };
 
@@ -281,6 +336,75 @@ export default function RewardsPage() {
           </div>
         )}
       </div>
+
+      {/* UPI Dialog */}
+      {showUpiDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 relative">
+            <button
+              onClick={() => setShowUpiDialog(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Enter UPI ID</h3>
+            <form onSubmit={handleUpiSubmit}>
+              <div className="mb-6">
+                <label htmlFor="upiId" className="block text-sm font-medium text-gray-700 mb-2">
+                  UPI ID
+                </label>
+                <input
+                  type="text"
+                  id="upiId"
+                  value={upiId}
+                  onChange={(e) => setUpiId(e.target.value)}
+                  placeholder="example@upi"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  required
+                />
+                <p className="mt-2 text-sm text-gray-500">
+                  Enter your UPI ID to receive ₹200 for 3,000 points
+                </p>
+                <p className="mt-1 text-xs text-gray-400">
+                  Valid formats: username@ybl, username@paytm, username@okhdfcbank, etc.
+                </p>
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowUpiDialog(false)}
+                  className="mr-3 px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isRedeeming}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium
+                    hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
+                    disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                >
+                  {isRedeeming ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Processing...
+                    </>
+                  ) : (
+                    'Redeem Points'
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

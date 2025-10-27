@@ -88,7 +88,7 @@ export const userApi = {
 
 export const rewardApi = {
   getHistory: () => api.get('/reward/history'),
-  redeem: (points) => api.post('/reward/redeem', { points }),
+  redeem: (data) => api.post('/reward/entry', data),
 };
 
 export const chatApi = {
