@@ -8,45 +8,119 @@ export default function HomePage() {
     <div>
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-violet-100/40 via-purple-100/40 to-fuchsia-100/40 backdrop-blur-3xl"></div>
-        <div className="relative py-20">
-          <div className="text-center max-w-4xl mx-auto px-4">
-            <div className="inline-block mb-6">
-              <div className="flex items-center justify-center space-x-2 bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full border border-purple-100">
-                <span className="flex h-2 w-2 rounded-full bg-purple-500"></span>
-                <span className="text-sm font-medium text-purple-900">Your Growth Journey Awaits</span>
+        {/* Background Effects */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-tr from-purple-50 via-white to-indigo-50"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-purple-200/30 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-to-t from-indigo-200/30 to-transparent rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-32">
+            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+              {/* Left Content */}
+              <div className="flex-1 text-center lg:text-left">
+                {/* Combined Banner */}
+                <div className="flex flex-wrap items-center justify-center gap-2 px-4 py-2.5 mb-8 bg-gradient-to-r from-purple-50 to-amber-50 rounded-xl border border-purple-100 shadow-sm">
+                  <div className="flex items-center">
+                    <span className="relative flex h-2.5 w-2.5 mr-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-purple-500"></span>
+                    </span>
+                    <span className="text-sm font-medium text-purple-900">Start your journey</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="mx-2 text-sm font-medium text-amber-700">•</span>
+                    <div className="flex items-center">
+                      <span className="text-sm font-medium text-amber-800">Complete challenges, earn cash rewards</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Main Heading */}
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight sm:leading-tight lg:leading-tight mb-6">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+                    Transform Your Life
+                  </span>
+                  <br />
+                  <span className="text-gray-900">One Challenge at a Time</span>
+                </h1>
+
+                {/* Description */}
+                <p className="text-lg sm:text-xl text-gray-600 leading-relaxed mb-8 max-w-2xl lg:max-w-none">
+                  Join a community of achievers completing daily challenges across physical, mental, 
+                  and personal dimensions. Track your progress, earn rewards, and become your best self.
+                </p>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+                  <Link
+                    to={isAuthenticated ? "/challenges" : "/register"}
+                    className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-xl
+                      text-base font-semibold relative overflow-hidden group"
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 transition-all duration-300
+                      group-hover:from-purple-700 group-hover:to-indigo-700"></span>
+                    <span className="absolute inset-0 opacity-0 group-hover:opacity-20 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.4)_0%,_transparent_70%)]"></span>
+                    <span className="relative text-white flex items-center">
+                      {isAuthenticated ? 'Explore Challenges' : 'Get Started'}
+                      <svg className="w-5 h-5 ml-2 -mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </span>
+                  </Link>
+                  <Link
+                    to={isAuthenticated ? "/leaderboard" : "/login"}
+                    className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-xl
+                      text-base font-semibold bg-white text-gray-700 border border-gray-200
+                      hover:text-gray-900 hover:border-gray-300 hover:bg-gray-50
+                      transition-all duration-200 shadow-sm hover:shadow"
+                  >
+                    {isAuthenticated ? 'View Leaderboard' : 'Sign In'}
+                  </Link>
+                </div>
+
+                {/* Feature Pills */}
+                <div className="mt-12 flex flex-wrap gap-3">
+                  <div className="inline-flex items-center px-3 py-1.5 rounded-lg bg-purple-50 border border-purple-100">
+                    <svg className="w-4 h-4 text-purple-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-sm text-purple-700">Daily Challenges</span>
+                  </div>
+                  <div className="inline-flex items-center px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-100">
+                    <svg className="w-4 h-4 text-indigo-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-sm text-indigo-700">Instant Rewards</span>
+                  </div>
+                  <div className="inline-flex items-center px-3 py-1.5 rounded-lg bg-pink-50 border border-pink-100">
+                    <svg className="w-4 h-4 text-pink-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <span className="text-sm text-pink-700">Track Progress</span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <h1 className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600 mb-6 leading-tight">
-              Elevate Your Life with Zenith
-            </h1>
-            <p className="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto mb-8">
-              Your journey to personal growth starts here. Complete daily challenges across physical, mental, 
-              and personal dimensions. Track your progress, earn rewards, and become your best self.
-            </p>
-            <div className="flex items-center justify-center gap-4">
-              <Link
-                to={isAuthenticated ? "/challenges" : "/register"}
-                className="inline-flex items-center px-6 py-3 rounded-xl text-base font-semibold
-                  bg-gradient-to-r from-indigo-500 to-purple-500 text-white
-                  hover:from-indigo-600 hover:to-purple-600
-                  transition-all duration-200 ease-out transform hover:scale-[1.02]
-                  shadow-sm hover:shadow"
-              >
-                {isAuthenticated ? 'Explore Challenges' : 'Get Started'}
-                <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none">
-                  <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </Link>
-              <Link
-                to={isAuthenticated ? "/leaderboard" : "/login"}
-                className="inline-flex items-center px-6 py-3 rounded-xl text-base font-semibold
-                  bg-white text-gray-700 hover:text-gray-900
-                  hover:bg-gray-50 border border-gray-200
-                  transition-all duration-200 ease-out"
-              >
-                {isAuthenticated ? 'View Leaderboard' : 'Sign In'}
-              </Link>
+
+              {/* Right Image/Animation */}
+              <div className="flex-1 relative hidden lg:block">
+                <div className="relative w-full max-w-lg mx-auto">
+                  {/* Background blur effects */}
+                  <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+                  <div className="absolute top-0 -right-4 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+                  <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+
+                  {/* Main Image Container */}
+                  <div className="relative">
+                    <div className="relative bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+                      <div className="aspect-[4/3] bg-gradient-to-br from-purple-100 to-indigo-50 flex items-center justify-center">
+                      <img src="/home-image.png" alt="Home" className="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
