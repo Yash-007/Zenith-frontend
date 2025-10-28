@@ -39,12 +39,22 @@ Zenith helps people build better habits by completing challenges across differen
 
 ## Tech Stack
 
-**Core**
+**Frontend**
 - React 19
 - Vite
 - Redux Toolkit
 - React Router v7
 - Tailwind CSS
+- Axios
+- React Hot Toast
+- React Calendar Heatmap
+
+**Backend**
+- Node.js + TypeScript + Express
+- PostgreSQL + Prisma ORM
+- Razorpay (Payments)
+- Google Gemini (AI Chat)
+- Redis (Caching)
 
 ## Getting Started
 
